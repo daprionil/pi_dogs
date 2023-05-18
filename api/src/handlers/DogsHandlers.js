@@ -1,6 +1,7 @@
 const getAllDogsController = require('../controllers/getAllDogsController');
 const createDogController = require('../controllers/createDogController');
 const getDogByIdController = require('../controllers/getDogByIdController');
+const getDogsByNameController = require('../controllers/getDogsByNameController');
 
 //? GET return all dogs in database
 const getAllDogs = async (req, res) => {
@@ -27,12 +28,11 @@ const getDogByRaza = async (req, res) => {
 //? GET - Filtered dogs by name
 const getDogsByName = async (req, res) => {
     try {
-        
-        //! PENDING ONLY REST THIS
-
-        res.status(200).json({ er: 'eso pa In HANDLER ' });
-    } catch ({ message }) {
-        res.status(400).json({ error: message });
+        const { q } = req.query;
+        const dogs = await getDogsByNameController({name:q});
+        res.status(200).json(dogs);
+    } catch ({message}) {
+        res.status(400).json({error:message});
     };
 };
 
