@@ -20,10 +20,22 @@
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 
+const getAllApiTemperamentsController = require('./src/controllers/getAllApiTemperamentsController.js');
+const createBulkTemperamentsController = require('./src/controllers/createBulkTemperamentsController.js');
+
+const port = process.env.PORT || 3001;
+
 // Syncing all the models at once.
-conn.sync({ alter: true })
+conn.sync({ force: true })
   .then(() => {
-    server.listen(3001, () => {
+    server.listen(port, () => {
       console.log('%s listening at 3001'); // eslint-disable-line no-console
     });
+
+    //! Get Temperaments from API apidogs
+    return getAllApiTemperamentsController(); //return array of all temperaments
+  })
+  .then(temperaments => {
+    //! Bulk create for temperaments in Model Temperament
+    return createBulkTemperamentsController({temperaments});
   });
