@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
 
 import bannerImageHome from '../assets/home_banner.webp';
 import iconBannerImageHome from '../assets/happy_dog_icon_banner_home.webp';
@@ -13,7 +14,9 @@ function BannerHomePage() {
                 <DogestIcon />
                 <h2>Conoce nuestra Plataforma</h2>
                 <p>Crea a Tu Raza Favorita</p>
-                <Button bgcolor="#ff4116" color='white' style={{width:"fit-content",fontWeight:"900"}}>Crear</Button>
+                <NavLink to="/createdog" style={{width:"fit-content"}}>
+                    <Button bgcolor="#ff4116" color='white' style={{width:"fit-content",fontWeight:"900"}}>Crear</Button>
+                </NavLink>
             </div>
             <img className='happy_dog_icon_banner' src={iconBannerImageHome} alt="happy dog"/>
         </BannerHomeStyled>

@@ -15,7 +15,7 @@ function Header() {
                         <NavLink to="/home">Home</NavLink>
                     </li>
                     <li className='item_menu'>
-                        <NavLink to="/medogs">Dogs</NavLink>
+                        <NavLink to="/medogs">Mis Dogs</NavLink>
                     </li>
                     <li className='item_menu create_dog'>
                         <NavLink to="/createdog">Crear Tu Dog</NavLink>
