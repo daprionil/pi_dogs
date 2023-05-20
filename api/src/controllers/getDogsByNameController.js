@@ -2,6 +2,7 @@ const { Op } = require('sequelize');
 const { Dog, Temperament } = require('../db');
 const { URL_API, API_KEY } = process.env;
 const { default: axios } = require('axios');
+const fixedDog = require('../utils/fixedDog');
 
 const getDogsByNameController = async ({name}) => {
     const nameSearch = name || '';
@@ -10,10 +11,13 @@ const getDogsByNameController = async ({name}) => {
     const dogs = await axios({
         method: 'GET',
         headers:{
+            'Content-Type':'application/json',
             'x-api-key': API_KEY
         },
         url: `${URL_API}/search?q=${nameSearch}`
     });
+
+    const dogsWasFixed = dogs.data.map(dog => fixedDog(dog));
 
     //* get dogs for Database
     const dogsDB = await Dog.findAll({
@@ -30,6 +34,6 @@ const getDogsByNameController = async ({name}) => {
             }
         }
     })
-    return [...dogs.data, ...dogsDB];
+    return [...dogsDB,...dogsWasFixed];
 }
 module.exports = getDogsByNameController;

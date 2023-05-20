@@ -8,12 +8,16 @@ module.exports = function(
         temperament,
         yearsOld,
         life_span,
-        Temperaments
+        Temperaments,
+        reference_image_id
     }
 ){
+    //https://cdn2.thedogapi.com/images/HyL3bl94Q.jpg
     return {
         name,
-        image: typeof image !== 'string' ? image.url : image,
+        image: image ?
+            typeof image !== 'string' ? image.url : image
+        : `https://cdn2.thedogapi.com/images/${reference_image_id}.jpg`,
         id,
         height: typeof height !== 'string' ?
             extractMediaOfWeightHeight(height)
