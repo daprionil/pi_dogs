@@ -37,16 +37,30 @@ const getAllDogsController = async () => {
     }) => (
         {
             name,
-            image,
+            image: typeof image !== 'string' ? image.url : image,
             id,
-            height,
-            weight,
-            Temperaments: temperament ? temperament.split(',')  : Temperaments,
+            height: typeof height !== 'string' ?
+                extractMediaOfWeightHeight(height)
+            : height,
+            weight:typeof weight !== 'string' ?
+                extractMediaOfWeightHeight(weight)
+            : weight,
+            Temperaments: temperament ?
+                        temperament.split(',').map(v => ({nombre:v})) :
+                        Temperaments,
             yearsOld: yearsOld || life_span.split(' ')[0],
         }
     ));
 
     return [...response, ...mapDataAPI];
+};
+
+function extractMediaOfWeightHeight(len){
+    const [one,two] = Object.entries(len).map(([k, val]) => {
+        const [first,,other] = val.split(' ') ;
+        return ((Number(first) + Number(other)) / 2);
+    });
+    return `${(one + two / 2).toFixed(1)}`
 };
 
 module.exports = getAllDogsController;
