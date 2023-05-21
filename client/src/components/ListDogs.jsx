@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
 import CardDog from "./CardDog";
+import SectionDefaultNullish from "./SectionDefaultNullish";
 
 function ListDogs({dogs=[]}) {
     return (
@@ -8,7 +9,10 @@ function ListDogs({dogs=[]}) {
             {
                 Boolean(dogs.length)? dogs.map((dog,i) => {
                     return <CardDog {...dog} key={dog.id}/>
-                }) : <p>No hay elementos por mostrar</p>
+                }) : <SectionDefaultNullish
+                        otherStyles={{gridColumn:"1/-1"}}
+                        message="No Hay Perros en Tu Busqueda"
+                    />
             }
         </ListDogsStyled>
     );
