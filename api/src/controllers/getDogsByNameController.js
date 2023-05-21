@@ -27,7 +27,7 @@ const getDogsByNameController = async ({name}) => {
 
     const dogs = await getAllDogsApiController();
     const dogsWasFixed = dogs.filter(({name:nameDog}) => (
-        new RegExp('\\'+ name + '\\w+\\b','i').test(nameDog)
+        new RegExp(name,'i').test(nameDog)
     ));
 
     //* get dogs for Database
