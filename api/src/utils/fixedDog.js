@@ -17,7 +17,9 @@ module.exports = function(
         name,
         image: image ?
             typeof image !== 'string' ? image.url : image
-        : `https://cdn2.thedogapi.com/images/${reference_image_id}.jpg`,
+        : reference_image_id ?
+            `https://cdn2.thedogapi.com/images/${reference_image_id}.jpg`:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSs9QCE6xoS_WQHh0P-Neg4IHTzcUb3jmSRuIYcnVnOVQEFx6hfz8hJmseWsgCoVtxVfos&usqp=CAU',
         id,
         height: typeof height !== 'string' ?
             extractMediaOfWeightHeight(height)
