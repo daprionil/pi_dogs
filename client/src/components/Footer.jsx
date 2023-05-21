@@ -3,8 +3,8 @@ import styled from 'styled-components';
 function Footer() {
     return (
         <FooterStyled>
-            <p>Todos los derechos reservado
-                <span> &copy;{new Date().getFullYear()}</span>
+            <p>Creado por David Bulla &#128420;
+                <span> &copy;{new Date().getFullYear()} </span>
             </p>
         </FooterStyled>
     );
