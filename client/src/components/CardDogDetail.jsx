@@ -9,11 +9,11 @@ function CardDogDetail({image, name, id, height, weight, yearsOld, Temperaments}
             <div className="info_dog">
                 <div className="title">
                     <h1>{name}</h1>
-                    <p><span>#</span>{id}</p>
+                    <p><span>#</span>{id.toString().slice(-2)}</p>
                 </div>
                 <div className="items_aspect">
-                    <h4>Altura Promedio: <span>{height}</span></h4>
-                    <h4>Peso Promedio: <span>{weight}</span></h4>
+                    <h4>Altura Promedio: <span>{height}</span> <em>{!isNaN(height) && 'cm'}</em></h4>
+                    <h4>Peso Promedio: <span>{weight}</span> <em>{!isNaN(weight) && 'lb'}</em></h4>
                 </div>
                 <h2>Temperamentos</h2>
                 <div className="temperaments">

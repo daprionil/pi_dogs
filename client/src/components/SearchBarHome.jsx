@@ -1,16 +1,23 @@
 import { styled } from "styled-components";
 import Button from "../base_components/Button";
 import getDogsByName from "../controllers/getDogsByName";
+import { useContext } from "react";
+import { changeCurrentPage, homeContext, setDogsFilteredContext } from "../context/HomeDogsContext";
 
-function SearchBarHome({setDogsFiltered}) {
+function SearchBarHome() {
+    const [,dispatchContextHome] = useContext(homeContext);
+
     const handleSubmit = evt => {
         evt.preventDefault();
         const val = evt.target['nameSearch'].value;
 
         if(val && isNaN(val)){
             getDogsByName({name:val})
-                .then(setDogsFiltered);
-        }
+                .then(data => {
+                    dispatchContextHome(setDogsFilteredContext(data));
+                    dispatchContextHome(changeCurrentPage('0'));
+                });
+        };
     };
 
     return (

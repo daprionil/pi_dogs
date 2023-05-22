@@ -1,8 +1,13 @@
 import { styled } from "styled-components";
 import CardDog from "./CardDog";
 import SectionDefaultNullish from "./SectionDefaultNullish";
+import { useContext } from "react";
+import { homeContext } from "../context/HomeDogsContext";
 
-function ListDogs({dogs=[]}) {
+function ListDogs() {
+    const [dataContextHome] = useContext(homeContext);
+    const dogs = dataContextHome.dogs_filtered[dataContextHome.page_current ?? 0] || [];
+    
     return (
         <ListDogsStyled>
             <h2 className="title_list_dogs">Lista de Razas</h2>
