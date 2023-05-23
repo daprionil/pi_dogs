@@ -8,7 +8,7 @@ import PaginatorDogsHome from '../components/PaginatorDogsHome';
 
 import ListDogs from '../components/ListDogs';
 import { useContext, useEffect } from 'react';
-import { setDogsFilteredContext, homeContext } from '../context/HomeDogsContext';
+import { setDogsFilteredContext, homeContext, setLoading } from '../context/HomeDogsContext';
 
 
 function Home() {
@@ -19,7 +19,9 @@ function Home() {
 
     //* Set dogs in local Component state
     useEffect(() => {
+        dispatchHome(setLoading(true));
         if(dogs.length){
+            dispatchHome(setLoading(false));
             //* Set new Data in the state dogsFiltered
             dispatchHome(setDogsFilteredContext(dogs));
         };
@@ -29,7 +31,7 @@ function Home() {
         <GroupPageDefault>
             <MainStyled>
                 <SearchBarHome />
-                <BannerHomePage />
+                {/* <BannerHomePage /> */}
                 <ListDogs />
                 <PaginatorDogsHome />
             </MainStyled>

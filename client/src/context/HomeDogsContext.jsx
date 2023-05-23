@@ -5,8 +5,14 @@ const homeContext = createContext();
 //* Type Actions
 const CHANGE_CURRENT_PAGE = "CHANGE_CURRENT_PAGE";
 const SET_DOGS_FILTERED = 'SET_DOGS_FILTERED';
+const SET_LOADING = "SET_LOADING";
 
 //* Create Type Actions
+const setLoading = (value) => ({
+    type: SET_LOADING,
+    payload: value
+});
+
 const changeCurrentPage = (page) => {
     return {
         type: CHANGE_CURRENT_PAGE,
@@ -22,6 +28,7 @@ const setDogsFilteredContext = (dogs) => {
         payload: currentDogsFiltered
     }
 }
+
 
 /**
  * dogs_filtered
@@ -42,6 +49,12 @@ const reducerContext = function(state, {type,payload}){
                 ...state,
                 page_current: payload
             };
+        },
+        [`${SET_LOADING}`]: () => {
+            return {
+                ...state,
+                loading: payload
+            };
         }
     })[type];
     return typeAction ? typeAction() : state;
@@ -51,7 +64,8 @@ const reducerContext = function(state, {type,payload}){
 
 const initialState = {
     dogs_filtered:[],
-    page_current:  null
+    page_current:  null,
+    loading:false
 };
 
 function HomeDogsContext({children}) {
@@ -92,5 +106,6 @@ export default HomeDogsContext;
 export {
     homeContext,
     changeCurrentPage,
-    setDogsFilteredContext
+    setDogsFilteredContext,
+    setLoading
 };

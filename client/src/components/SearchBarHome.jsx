@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import Button from "../base_components/Button";
 import getDogsByName from "../controllers/getDogsByName";
 import { useContext } from "react";
-import { changeCurrentPage, homeContext, setDogsFilteredContext } from "../context/HomeDogsContext";
+import { changeCurrentPage, homeContext, setDogsFilteredContext, setLoading } from "../context/HomeDogsContext";
 
 function SearchBarHome() {
     const [,dispatchContextHome] = useContext(homeContext);
@@ -12,10 +12,17 @@ function SearchBarHome() {
         const val = evt.target['nameSearch'].value;
 
         if(val && isNaN(val)){
+            dispatchContextHome(setLoading(true));
             getDogsByName({name:val})
                 .then(data => {
+                    //Get values by controller and set in the context
                     dispatchContextHome(setDogsFilteredContext(data));
+
+                    //Set page current value
                     dispatchContextHome(changeCurrentPage('0'));
+
+                    //Change Loading
+                    dispatchContextHome(setLoading(false));
                 });
         };
     };

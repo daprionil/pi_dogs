@@ -1,6 +1,9 @@
 import { styled } from "styled-components";
 
 const Loader = styled.div`
+    grid-column: 1/-1;
+    
+    margin: 0 auto;
     width: 50px;
     height: 50px;
     --c: radial-gradient(farthest-side,#F40000 92%,#0000);

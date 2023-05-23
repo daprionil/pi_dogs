@@ -3,6 +3,7 @@ import CardDog from "./CardDog";
 import SectionDefaultNullish from "./SectionDefaultNullish";
 import { useContext } from "react";
 import { homeContext } from "../context/HomeDogsContext";
+import Loader from '../base_components/Loader';
 
 function ListDogs() {
     const [dataContextHome] = useContext(homeContext);
@@ -12,9 +13,16 @@ function ListDogs() {
         <ListDogsStyled>
             <h2 className="title_list_dogs">Lista de Razas</h2>
             {
-                Boolean(dogs.length)? dogs.map((dog,i) => {
-                    return <CardDog {...dog} key={dog.id}/>
-                }) : <SectionDefaultNullish
+                dataContextHome.loading ?
+                    <Loader></Loader>
+                :
+                    Boolean(dogs.length) ? //If exist dogs for display
+                        
+                        dogs.map((dog,i) => {
+                            return <CardDog {...dog} key={dog.id}/>
+                        })
+
+                    : <SectionDefaultNullish
                         otherStyles={{gridColumn:"1/-1"}}
                         message="No Hay Perros en Tu Busqueda"
                     />
