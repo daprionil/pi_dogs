@@ -14,6 +14,7 @@ import HomeDogsContext from './context/HomeDogsContext';
 function App() {
   const dispatch = useDispatch();
   (() => {dispatch(getDogs())})()
+  
   return (
     //! Definir Rutas
     <div>

@@ -4,11 +4,24 @@ import SectionDefaultNullish from "./SectionDefaultNullish";
 import { useContext } from "react";
 import { homeContext } from "../context/HomeDogsContext";
 import Loader from '../base_components/Loader';
+import { useDispatch } from "react-redux";
+
+import { addDogFavorite, deleteDogFavorite } from "../redux/createActions";
 
 function ListDogs() {
+    const dispathRedux = useDispatch();
+
     const [dataContextHome] = useContext(homeContext);
     const dogs = dataContextHome.dogs_filtered[dataContextHome.page_current ?? 0] || [];
     
+    const addToFavoriteDog = (id, favorite) => {
+        if(favorite){
+            dispathRedux(deleteDogFavorite(id));
+            return;
+        }
+        dispathRedux(addDogFavorite(id));
+    };
+
     return (
         <ListDogsStyled>
             <h2 className="title_list_dogs">Lista de Razas</h2>
@@ -19,7 +32,7 @@ function ListDogs() {
                     Boolean(dogs.length) ? //If exist dogs for display
                         
                         dogs.map((dog,i) => {
-                            return <CardDog {...dog} key={dog.id}/>
+                            return <CardDog {...dog} addDogFavorite={addToFavoriteDog} key={dog.id}/>
                         })
 
                     : <SectionDefaultNullish

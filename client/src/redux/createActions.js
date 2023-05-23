@@ -12,6 +12,18 @@ const getDogs = function(){
     };
 };
 
+const addDogFavorite = (id) => ({
+    type: ADD_DOG_FAVORITE,
+    payload:id   
+});
+
+const deleteDogFavorite = (id) => ({
+    type: DELETE_DOG_FAVORITE,
+    payload:id 
+});
+
 export {
-    getDogs
+    getDogs,
+    addDogFavorite,
+    deleteDogFavorite
 }

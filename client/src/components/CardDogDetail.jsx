@@ -49,7 +49,7 @@ const CardDogsStyled = styled.div`
     & .section_image{
         img{
             @media (max-width:900px){
-                aspect-ratio: 3/1;
+                aspect-ratio: 5/3;
             }
             width: 100%;
             height: 100%;

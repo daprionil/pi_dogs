@@ -2,8 +2,14 @@ import { useState } from "react";
 import { styled } from "styled-components";
 import { Link } from "react-router-dom";
 
-function CardDog({name, image, yearsOld, id}) {
+function CardDog({name, image, yearsOld, id, addDogFavorite}) {
     const [favorite, setFavorite] = useState(false);
+
+    const handleClickFavorite = () => {
+        setFavorite(state => !state);
+        addDogFavorite(id,favorite)
+    };
+
     return (
         <CardDogStyled>
             <Link to={`/dogs/${id}`}>
@@ -18,7 +24,7 @@ function CardDog({name, image, yearsOld, id}) {
             <div
                 className="favorite_emoji"
                 dangerouslySetInnerHTML={{__html:favorite ? '&#128159;':'&#128420;'}}
-                onClick={() => setFavorite(state => !state)}
+                onClick={handleClickFavorite}
             ></div>
         </CardDogStyled>
     );
