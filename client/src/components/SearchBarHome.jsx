@@ -4,13 +4,14 @@ import getDogsByName from "../controllers/getDogsByName";
 import { useContext } from "react";
 import { changeCurrentPage, homeContext, setDogsFilteredContext, setLoading } from "../context/HomeDogsContext";
 
-function SearchBarHome() {
+function SearchBarHome({dogsRedux}) {
     const [,dispatchContextHome] = useContext(homeContext);
 
     const handleSubmit = evt => {
         evt.preventDefault();
         const val = evt.target['nameSearch'].value;
 
+        //* If exist a value to search
         if(val && isNaN(val)){
             dispatchContextHome(setLoading(true));
             getDogsByName({name:val})
@@ -24,7 +25,14 @@ function SearchBarHome() {
                     //Change Loading
                     dispatchContextHome(setLoading(false));
                 });
+            return;
         };
+
+        //* If Dont exist a value to search
+        if(!val){
+            dispatchContextHome(setDogsFilteredContext(dogsRedux));
+            return;
+        }
     };
 
     return (

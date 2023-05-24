@@ -26,8 +26,8 @@ const setDogsFilteredContext = (dogs) => {
     return {
         type: SET_DOGS_FILTERED,
         payload: currentDogsFiltered
-    }
-}
+    };
+};
 
 
 /**

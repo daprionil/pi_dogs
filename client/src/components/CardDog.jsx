@@ -2,12 +2,12 @@ import { useState } from "react";
 import { styled } from "styled-components";
 import { Link } from "react-router-dom";
 
-function CardDog({name, image, yearsOld, id, addDogFavorite}) {
-    const [favorite, setFavorite] = useState(false);
+function CardDog({name, image, yearsOld, id, addDogFavorite, favorite}) {
+    const [favoriteState, setFavoriteState] = useState(favorite);
 
     const handleClickFavorite = () => {
-        setFavorite(state => !state);
-        addDogFavorite(id,favorite)
+        setFavoriteState(state => !state);
+        addDogFavorite(id,favoriteState);
     };
 
     return (
@@ -23,7 +23,7 @@ function CardDog({name, image, yearsOld, id, addDogFavorite}) {
             </div>
             <div
                 className="favorite_emoji"
-                dangerouslySetInnerHTML={{__html:favorite ? '&#128159;':'&#128420;'}}
+                dangerouslySetInnerHTML={{__html:favoriteState ? '&#128159;':'&#128420;'}}
                 onClick={handleClickFavorite}
             ></div>
         </CardDogStyled>

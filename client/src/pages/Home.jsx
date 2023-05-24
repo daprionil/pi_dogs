@@ -13,7 +13,7 @@ import { setDogsFilteredContext, homeContext, setLoading } from '../context/Home
 
 function Home() {
     //* Get dogs from Global Store
-    const dogs = useSelector(({all_dogs}) => all_dogs);
+    const {all_dogs:dogs,favorite_dogs} = useSelector(({all_dogs,favorite_dogs}) => ({all_dogs,favorite_dogs}));
     
     const [,dispatchHome] = useContext(homeContext);
 
@@ -30,9 +30,9 @@ function Home() {
     return (
         <GroupPageDefault>
             <MainStyled>
-                <SearchBarHome />
-                {/* <BannerHomePage /> */}
-                <ListDogs />
+                <SearchBarHome dogsRedux={dogs}/>
+                <BannerHomePage />
+                <ListDogs favorite_dogs={favorite_dogs}/>
                 <PaginatorDogsHome />
             </MainStyled>
         </GroupPageDefault>

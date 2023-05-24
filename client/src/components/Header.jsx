@@ -31,6 +31,10 @@ const HeaderStyled = styled.header`
     /**
         //! Realizar sticky, validate height
     */
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(2px);
+
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;

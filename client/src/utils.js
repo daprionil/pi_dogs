@@ -3,6 +3,16 @@ const parsedDogs = (payload, favorite_dogs) => payload.map(dog => ({
     favorite: favorite_dogs.has(dog.id)
 }));
 
+const setStorageValue = (name,value) => {
+    return localStorage.setItem(name, JSON.stringify(value));
+}
+
+const getStorageValue = (name) => {
+    return JSON.parse(localStorage.getItem(name));
+};
+
 export {
-    parsedDogs
+    parsedDogs,
+    setStorageValue,
+    getStorageValue
 }
