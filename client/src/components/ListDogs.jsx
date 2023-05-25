@@ -7,13 +7,13 @@ import Loader from '../base_components/Loader';
 import { useDispatch } from "react-redux";
 
 import { addDogFavorite, deleteDogFavorite } from "../redux/createActions";
-import { parsedDogs } from "../utils";
+import { parsedDogsFavorite } from "../utils";
 
 function ListDogs({favorite_dogs}) {
     const dispathRedux = useDispatch();
 
     const [dataContextHome] = useContext(homeContext);
-    const dogs = parsedDogs(
+    const dogs = parsedDogsFavorite(
         dataContextHome.dogs_filtered[dataContextHome.page_current ?? 0] || [],
         favorite_dogs
     );

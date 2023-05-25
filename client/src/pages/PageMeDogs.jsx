@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import GroupPageDefault from "../components/GroupPageDefault";
 import CardDog from "../components/CardDog";
 import { styled } from "styled-components";
-import { parsedDogs } from "../utils";
+import { parsedDogsFavorite } from "../utils";
 import { addDogFavorite, deleteDogFavorite } from "../redux/createActions";
 
 function PageMeDogs() {
     const dispatchRedux = useDispatch();
     const dogsFavorites = useSelector(({favorite_dogs}) => {
-        return parsedDogs([...favorite_dogs.entries()].map(([l,dog]) => dog), favorite_dogs);
+        return parsedDogsFavorite([...favorite_dogs.entries()].map(([l,dog]) => dog), favorite_dogs);
     });
     
     const addToFavoriteDog = (id, favorite) => {
@@ -42,6 +42,7 @@ const ListFavoritesPage = styled.section`
     
     max-width: 1100px;
     margin: 0 auto;
+    margin-bottom: 100px;
 
     & h1{
         @media (max-width: 900px) {

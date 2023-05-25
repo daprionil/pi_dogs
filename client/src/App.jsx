@@ -7,13 +7,18 @@ import DogPageDetails from './pages/DogPageDetails';
 import CreateDog from './pages/CreateDog';
 import PageMeDogs from './pages/PageMeDogs';
 import LandingPage from './pages/LandingPage';
+import HomeDogsContext from './context/HomeDogsContext';
+import { getTemperaments } from './redux/createActions';
+
 import { useDispatch } from 'react-redux';
 import { getDogs } from './redux/createActions';
-import HomeDogsContext from './context/HomeDogsContext';
 
 function App() {
   const dispatch = useDispatch();
-  (() => {dispatch(getDogs())})()
+  (() => {
+    dispatch(getDogs());
+    dispatch(getTemperaments());
+  })();
   
   return (
     //! Definir Rutas

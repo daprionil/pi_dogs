@@ -1,4 +1,4 @@
-const parsedDogs = (payload, favorite_dogs) => payload.map(dog => ({
+const parsedDogsFavorite = (payload, favorite_dogs) => payload.map(dog => ({
     ...dog,
     favorite: favorite_dogs.has(dog.id)
 }));
@@ -12,7 +12,7 @@ const getStorageValue = (name) => {
 };
 
 export {
-    parsedDogs,
+    parsedDogsFavorite,
     setStorageValue,
     getStorageValue
 }

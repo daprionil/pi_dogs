@@ -9,6 +9,7 @@ import PaginatorDogsHome from '../components/PaginatorDogsHome';
 import ListDogs from '../components/ListDogs';
 import { useContext, useEffect } from 'react';
 import { setDogsFilteredContext, homeContext, setLoading } from '../context/HomeDogsContext';
+import FilterDogsHome from '../components/FilterHomeDogs';
 
 
 function Home() {
@@ -32,6 +33,7 @@ function Home() {
             <MainStyled>
                 <SearchBarHome dogsRedux={dogs}/>
                 <BannerHomePage />
+                <FilterDogsHome />
                 <ListDogs favorite_dogs={favorite_dogs}/>
                 <PaginatorDogsHome />
             </MainStyled>
