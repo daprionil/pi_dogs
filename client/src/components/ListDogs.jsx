@@ -14,7 +14,7 @@ function ListDogs({favorite_dogs}) {
 
     const [dataContextHome] = useContext(homeContext);
     const dogs = parsedDogsFavorite(
-        dataContextHome.dogs_filtered[dataContextHome.page_current ?? 0] || [],
+        dataContextHome.filtered_dogs_context[dataContextHome.page_current ?? 0] || [],
         favorite_dogs
     );
     

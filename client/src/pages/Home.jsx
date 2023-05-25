@@ -8,7 +8,7 @@ import PaginatorDogsHome from '../components/PaginatorDogsHome';
 
 import ListDogs from '../components/ListDogs';
 import { useContext, useEffect } from 'react';
-import { setDogsFilteredContext, homeContext, setLoading } from '../context/HomeDogsContext';
+import { setDogsContext, homeContext, setLoading } from '../context/HomeDogsContext';
 import FilterDogsHome from '../components/FilterHomeDogs';
 
 
@@ -23,8 +23,8 @@ function Home() {
         dispatchHome(setLoading(true));
         if(dogs.length){
             dispatchHome(setLoading(false));
-            //* Set new Data in the state dogsFiltered
-            dispatchHome(setDogsFilteredContext(dogs));
+            //* Set new Data in the state dogs context
+            dispatchHome(setDogsContext(dogs));
         };
     },[dogs]);
 

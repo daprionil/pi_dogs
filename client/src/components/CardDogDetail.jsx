@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import SectionDefaultNullish from "./SectionDefaultNullish";
 
 function CardDogDetail({image, name, id, height, weight, yearsOld, Temperaments}) {
     return (
@@ -18,9 +19,9 @@ function CardDogDetail({image, name, id, height, weight, yearsOld, Temperaments}
                 <h2>Temperamentos</h2>
                 <div className="temperaments">
                     {
-                        Temperaments.map(({nombre}, i) => (
+                        Temperaments ? Temperaments.map(({nombre}, i) => (
                             <Temperament key={i}>{nombre}</Temperament>
-                        ))
+                        )) : <SectionDefaultNullish message="Sin Temperamentos" />
                     }
                 </div>
             </div>

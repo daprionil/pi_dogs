@@ -1,11 +1,13 @@
 import { createContext, useEffect, useReducer } from "react";
+import { parseDogsPaginator, filteredDogsByAttributes } from "../utils";
 
 const homeContext = createContext();
 
 //* Type Actions
 const CHANGE_CURRENT_PAGE = "CHANGE_CURRENT_PAGE";
-const SET_DOGS_FILTERED = 'SET_DOGS_FILTERED';
+const SET_DOGS_CONTEXT = 'SET_DOGS_CONTEXT';
 const SET_LOADING = "SET_LOADING";
+const SET_DOGS_FILTERED = 'SET_DOGS_FILTERED';
 
 //* Create Type Actions
 const setLoading = (value) => ({
@@ -20,15 +22,21 @@ const changeCurrentPage = (page) => {
     }
 };
 
-const setDogsFilteredContext = (dogs) => {
+const setDogsContext = (dogs) => {
     //* Parse Dogs received
     const currentDogsFiltered = parseDogsPaginator(dogs);
     return {
-        type: SET_DOGS_FILTERED,
+        type: SET_DOGS_CONTEXT,
         payload: currentDogsFiltered
     };
 };
 
+const filterDogsContext = ({min,max, temperament}) => {
+    return {
+        type: SET_DOGS_FILTERED,
+        payload: {min,max,temperament}
+    };
+};
 
 /**
  * dogs_filtered
@@ -38,10 +46,11 @@ const setDogsFilteredContext = (dogs) => {
 //? Generate context
 const reducerContext = function(state, {type,payload}){
     const typeAction = ({
-        [`${SET_DOGS_FILTERED}`]:() => {
+        [`${SET_DOGS_CONTEXT}`]:() => {
             return {
                 ...state,
-                dogs_filtered: payload
+                dogs_context: payload,
+                filtered_dogs_context: payload
             };
         },
         [`${CHANGE_CURRENT_PAGE}`]: () => {
@@ -55,6 +64,15 @@ const reducerContext = function(state, {type,payload}){
                 ...state,
                 loading: payload
             };
+        },
+        [`${SET_DOGS_FILTERED}`]:() => {
+            const {min,max, temperament} = payload;
+            const dogsFiltered = filteredDogsByAttributes(state.dogs_context.flat(),{min,max, temperament});
+            const parsedDogs = parseDogsPaginator(dogsFiltered);
+            return {
+                ...state,
+                filtered_dogs_context:parsedDogs
+            }
         }
     })[type];
     return typeAction ? typeAction() : state;
@@ -63,9 +81,10 @@ const reducerContext = function(state, {type,payload}){
 //* Fixed Initial State
 
 const initialState = {
-    dogs_filtered:[],
+    dogs_context:[],
     page_current:  null,
-    loading:false
+    loading:false,
+    filtered_dogs_context:[]
 };
 
 function HomeDogsContext({children}) {
@@ -87,25 +106,11 @@ function HomeDogsContext({children}) {
     );
 };
 
-//! Take an Array and Split it by Pages
-const parseDogsPaginator = function(elements){
-    const nPerPage = 20;
-    const nPages = Math.ceil(elements.length / nPerPage);
-
-    let pagesDogs = [];
-
-    for(let i = 0; i < nPages; i++){
-        const startPage = nPages*i;
-        pagesDogs.push(elements.slice(startPage, startPage + nPerPage));
-    };
-
-    return pagesDogs;
-};
-
 export default HomeDogsContext;
 export {
     homeContext,
     changeCurrentPage,
-    setDogsFilteredContext,
-    setLoading
+    setDogsContext,
+    setLoading,
+    filterDogsContext
 };

@@ -1,11 +1,14 @@
 import { styled } from "styled-components";
 import Button from "../base_components/Button";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { changeCurrentPage, homeContext } from "../context/HomeDogsContext";
 
 function PaginatorDogsHome() {
     const [dataContextHome, dispatchHome] = useContext(homeContext);
-    const numberPages = dataContextHome.dogs_filtered.length;
+    const numberPages = dataContextHome.filtered_dogs_context.length;
+    
+    //* It have a values to range paginator
+    const [valuesRange, setValuesRange] = useState({initRange:0, finishRange:numberPages});
 
     const handleClick = (evt) => {
         const nPage = evt.target.getAttribute('data-page');
@@ -13,9 +16,23 @@ function PaginatorDogsHome() {
         //? Change current page
         dispatchHome(changeCurrentPage(nPage));
     };
-    
+
+    //* If change any this values, set new Values to generate paginator
+    useEffect(() => {
+        //* Set dinamic paginator
+        const pageCurrent = Number(dataContextHome.page_current);
+        const initRange = numberPages > 8 && pageCurrent > 4 ?
+                            pageCurrent - 4 : 0;
+        const finishRange = numberPages > 8 && ((pageCurrent - 4) < numberPages - 4)
+                            ? pageCurrent + 4 : numberPages;
+        setValuesRange({initRange, finishRange});
+
+        
+    },[dataContextHome.filtered_dogs_context, dataContextHome.page_current])
+
     return (
-        <PaginatorStyled>
+        <PaginatorStyled onMouseMove={(e) => {e.target}}>
+            { (numberPages > 8 && Number(dataContextHome.page_current) - 4 > 0) && '...'}
             {
                 Boolean(numberPages) && new Array(numberPages).fill('').map((e,i) =>(
                     <ButtonPaginator
@@ -24,8 +41,9 @@ function PaginatorDogsHome() {
                         key={i}
                         onClick={handleClick.bind(i)}
                     >{i}</ButtonPaginator>
-                ))
+                )).slice(valuesRange.initRange, valuesRange.finishRange)
             }
+            { (numberPages > 8 && Number(dataContextHome.page_current) + 4 < numberPages) && '...'}
         </PaginatorStyled>
     );
 }
@@ -34,6 +52,8 @@ const PaginatorStyled = styled.div`
     max-width: 500px;
     margin: 0 auto;
 
+    overflow-x: hidden;
+
     border-radius: 10px;
     padding: 2px 10px;
 
@@ -41,6 +61,8 @@ const PaginatorStyled = styled.div`
     justify-content: center;
     align-items: center;
     gap: 10px;
+
+    padding: 10px;
     
 
     margin-bottom: 50px;

@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import Button from "../base_components/Button";
 import getDogsByName from "../controllers/getDogsByName";
 import { useContext } from "react";
-import { changeCurrentPage, homeContext, setDogsFilteredContext, setLoading } from "../context/HomeDogsContext";
+import { changeCurrentPage, homeContext, setDogsContext, setLoading } from "../context/HomeDogsContext";
 
 function SearchBarHome({dogsRedux}) {
     const [,dispatchContextHome] = useContext(homeContext);
@@ -13,16 +13,19 @@ function SearchBarHome({dogsRedux}) {
 
         //* If exist a value to search
         if(val && isNaN(val)){
+            //* Set value to display loading
             dispatchContextHome(setLoading(true));
+            
+            //* Get dogs by name from controller and set in Context
             getDogsByName({name:val})
                 .then(data => {
                     //Get values by controller and set in the context
-                    dispatchContextHome(setDogsFilteredContext(data));
+                    dispatchContextHome(setDogsContext(data));
 
-                    //Set page current value
+                    //*Set page current value
                     dispatchContextHome(changeCurrentPage('0'));
 
-                    //Change Loading
+                    //* Set value to hide loading
                     dispatchContextHome(setLoading(false));
                 });
             return;
@@ -30,7 +33,7 @@ function SearchBarHome({dogsRedux}) {
 
         //* If Dont exist a value to search
         if(!val){
-            dispatchContextHome(setDogsFilteredContext(dogsRedux));
+            dispatchContextHome(setDogsContext(dogsRedux));
             return;
         }
     };

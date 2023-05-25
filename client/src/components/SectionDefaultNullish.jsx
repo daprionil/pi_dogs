@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 
-function SectionDefaultNullish({message = "Ha habido un Error en la Carga", otherStyles}) {
+function SectionDefaultNullish({message = "Ha habido un Error en la Carga", otherStyles = {}}) {
     return (
         <DefaultStyled style={otherStyles}>
             {message}

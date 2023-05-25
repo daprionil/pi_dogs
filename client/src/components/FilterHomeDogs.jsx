@@ -2,39 +2,54 @@ import Input from "../base_components/Input";
 import Form from '../base_components/Form';
 import styled from "styled-components";
 import Select from "../base_components/Select";
+import Button from "../base_components/Button";
+import FilterSvg from "../base_components/FilterSvg";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useSelector } from "react-redux";
+import { homeContext, filterDogsContext, changeCurrentPage } from "../context/HomeDogsContext";
 
 function FilterDogsHome() {
     const Temperaments = useSelector(({all_temperaments}) => all_temperaments);
+    const [,dispatchContextHome] = useContext(homeContext);
     const [valuesForm, changeValuesForm] = useState({min:0, max:0,temperament:''});
 
     const handleChange = ({target:{name, value}}) => {
         changeValuesForm(state => {
             const {max,min} = state;
-            const maxNumber = parseInt(max), minNumber = parseInt(min);
             
             //* If the min value is greather than the max value
-            if(name === 'min' && minNumber + 1 > maxNumber){
-                return {...state, [name]:parseInt(value), max:parseInt(value)}
+            if(name === 'min' && parseInt(value) + 1 > max){
+                const minValue = parseInt(value);
+                return {...state, [name]:minValue, max:minValue}
             }
-
-            if(name === 'max' && maxNumber + 1 < minNumber){
-                return {...state, [name]:parseInt(value), min:parseInt(value)}
-            }
-
+            //* If the max value is less than the min value
+            if(name === 'max' && parseInt(value) + 1 < min){
+                const maxValue = parseInt(value);
+                return {...state, [name]:maxValue, min:maxValue}
+            };
+            
             return {
                 ...state,
-                [name]:value
-            }
-        })
+                [name]: name !== 'temperament' ? parseInt(value) : value
+            };
+        });
+    };
+    
+    //Send to context the properties to validate
+    const handleSubmit = evt => {
+        evt.preventDefault();
+        
+        //* Send values to filter data dogs
+        dispatchContextHome(filterDogsContext({...valuesForm}));
+
+        //* Set current page in 0 to get dogs
+        dispatchContextHome(changeCurrentPage('0'));
     };
 
     return (
         <ContenedorFilterHome>
-            <Form style={optionsStyleForm}>
-                <Titulo>Filtrar</Titulo>
+            <FormFilter onSubmit={handleSubmit}>
                 <ContenedorRange>
                     <label htmlFor="min">Peso Mínimo</label>
                     <Input
@@ -69,37 +84,43 @@ function FilterDogsHome() {
                         ))
                     }
                 </Select>
-            </Form>
+                <ButtonForm><FilterSvg /> Filtrar</ButtonForm>
+            </FormFilter>
         </ContenedorFilterHome>
     );
 };
 
-const optionsStyleForm = {
-    display: 'flex',
-    flexWrap:'wrap',
-    alignItems: 'center',
-    justifyContent:'left',
-    background:'#e2e2e2',
-    color:'black',
-    fontSize: '0.9rem'
-}
-
-const Titulo = styled.h2`
-    margin: 0 auto;
-    font-size: 1.2rem;
+const FormFilter = styled(Form)`
+    @media (max-width: 776px) {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    
+    color: black;
+    font-size: .9rem;
+    gap: 10px;
 `;
 
 const ContenedorFilterHome = styled.div`
-    width: min-content;
-    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    background: #e2e2e2;
+    margin: 10px;
 `;
 
 const ContenedorRange = styled.div`
-    width:100%;
+    @media (max-width: 776px) {
+        justify-content: center;
+    }
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
+    
     gap: 10px;
     padding: 2px;
 
@@ -120,6 +141,22 @@ const ContenedorRange = styled.div`
     }
     & input[type="range"]{
         padding: 0;
+    }
+`;
+
+const ButtonForm = styled(Button)`
+    font-size: inherit;
+    padding: 5px 10px;
+    background: #ff4116;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover{
+        transform: scale(1.04);
     }
 `;
 
