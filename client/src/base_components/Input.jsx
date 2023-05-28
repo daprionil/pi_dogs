@@ -26,6 +26,8 @@ const Input = styled.input`
         -webkit-appearance: none;
         position: relative;
 
+        width: fit-content;
+
         &:checked{
             &::before{
                 display: block;

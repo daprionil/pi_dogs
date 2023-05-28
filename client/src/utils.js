@@ -26,7 +26,7 @@ const parseDogsPaginator = function(elements){
     return pagesDogs;
 };
 
-const filteredDogsByAttributes = function(dogs,{min,max, temperament, database}){
+const filteredDogsByAttributes = function(dogs,{min,max, temperament, database, order}){
     const filteredDogs = dogs.filter(({weight}) => {
         if(min !== 0){
             return parseFloat(weight) >= parseFloat(min)
@@ -49,6 +49,12 @@ const filteredDogsByAttributes = function(dogs,{min,max, temperament, database})
             return db;
         };
         return true
+    }).sort(({name:nA},{name:nB}) => {
+        const [n1,n2] = [nA.toLowerCase().charCodeAt(), nB.toLowerCase().charCodeAt()];
+        if(order){
+            return n2-n1;
+        };
+        return n1-n2;
     });
     return filteredDogs;
 };

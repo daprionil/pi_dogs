@@ -12,7 +12,7 @@ import { homeContext, filterDogsContext, changeCurrentPage } from "../context/Ho
 function FilterDogsHome() {
     const Temperaments = useSelector(({all_temperaments}) => all_temperaments);
     const [,dispatchContextHome] = useContext(homeContext);
-    const [valuesForm, changeValuesForm] = useState({min:0, max:0,temperament:'', database: false});
+    const [valuesForm, changeValuesForm] = useState({min:0, max:0,temperament:'', database: false, order:false});
 
     const handleChange = ({target:{type,name, value,checked}}) => {
         changeValuesForm(state => {
@@ -84,8 +84,16 @@ function FilterDogsHome() {
                     />
                     <span>{valuesForm.max}</span>
                 </ContenedorRange>
-                <label htmlFor="checbox_database">Creados</label>
-                <Input type="checkbox" id="checkbox_database" checked={valuesForm.database} onChange={handleChange} name="database"/>
+                <ContenedorBaseInput>
+                    <ContenedorBaseInput>
+                        <label htmlFor="checbox_database">Creados</label>
+                        <Input type="checkbox" id="checkbox_database" checked={valuesForm.database} onChange={handleChange} name="database"/>
+                    </ContenedorBaseInput>
+                    <ContenedorBaseInput>
+                        <label htmlFor="order_filter">{valuesForm.order ? 'ascendente' : 'descendente'}</label>
+                        <Input type="checkbox" checked={valuesForm.order} name="order" onChange={handleChange} id="order_filter"/>
+                    </ContenedorBaseInput>
+                </ContenedorBaseInput>
                 <Select onChange={handleChange} value={valuesForm.temperament} name="temperament">
                     <option value="">Seleccionar Temperamento</option>
                     {
@@ -105,14 +113,15 @@ const FormFilter = styled(Form)`
         display: grid;
         grid-template-columns: 1fr;
     }
-    display: flex;
+
+    display:flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     
     color: black;
     font-size: .9rem;
-    gap: 10px;
+    gap:5px 10px;
 `;
 
 const ContenedorFilterHome = styled.div`
@@ -120,7 +129,16 @@ const ContenedorFilterHome = styled.div`
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     background: #e2e2e2;
     margin: 10px;
+    z-index: 3;
 `;
+
+const ContenedorBaseInput = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+`
 
 const ContenedorRange = styled.div`
     @media (max-width: 776px) {
