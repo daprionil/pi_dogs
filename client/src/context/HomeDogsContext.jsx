@@ -31,10 +31,10 @@ const setDogsContext = (dogs) => {
     };
 };
 
-const filterDogsContext = ({min,max, temperament}) => {
+const filterDogsContext = ({min,max, temperament,database}) => {
     return {
         type: SET_DOGS_FILTERED,
-        payload: {min,max,temperament}
+        payload: {min,max,temperament,database}
     };
 };
 
@@ -66,8 +66,8 @@ const reducerContext = function(state, {type,payload}){
             };
         },
         [`${SET_DOGS_FILTERED}`]:() => {
-            const {min,max, temperament} = payload;
-            const dogsFiltered = filteredDogsByAttributes(state.dogs_context.flat(),{min,max, temperament});
+            const {min,max,temperament,database} = payload;
+            const dogsFiltered = filteredDogsByAttributes(state.dogs_context.flat(),{min,max, temperament, database});
             const parsedDogs = parseDogsPaginator(dogsFiltered);
             return {
                 ...state,

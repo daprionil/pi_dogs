@@ -26,7 +26,7 @@ const parseDogsPaginator = function(elements){
     return pagesDogs;
 };
 
-const filteredDogsByAttributes = function(dogs,{min,max, temperament}){
+const filteredDogsByAttributes = function(dogs,{min,max, temperament, database}){
     const filteredDogs = dogs.filter(({weight}) => {
         if(min !== 0){
             return parseFloat(weight) >= parseFloat(min)
@@ -44,6 +44,11 @@ const filteredDogsByAttributes = function(dogs,{min,max, temperament}){
             return temps.includes(temperament);
         }
         return true;
+    }).filter(({db}) => {
+        if(database){
+            return db;
+        };
+        return true
     });
     return filteredDogs;
 };

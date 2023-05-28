@@ -12,9 +12,9 @@ import { homeContext, filterDogsContext, changeCurrentPage } from "../context/Ho
 function FilterDogsHome() {
     const Temperaments = useSelector(({all_temperaments}) => all_temperaments);
     const [,dispatchContextHome] = useContext(homeContext);
-    const [valuesForm, changeValuesForm] = useState({min:0, max:0,temperament:''});
+    const [valuesForm, changeValuesForm] = useState({min:0, max:0,temperament:'', database: false});
 
-    const handleChange = ({target:{name, value}}) => {
+    const handleChange = ({target:{type,name, value,checked}}) => {
         changeValuesForm(state => {
             const {max,min} = state;
             
@@ -28,7 +28,15 @@ function FilterDogsHome() {
                 const maxValue = parseInt(value);
                 return {...state, [name]:maxValue, min:maxValue}
             };
-            
+
+            //* If the field is a checkbox input
+            if(type === 'checkbox'){
+                return {
+                    ...state,
+                    [name]: checked
+                };
+            };
+
             return {
                 ...state,
                 [name]: name !== 'temperament' ? parseInt(value) : value
@@ -76,6 +84,8 @@ function FilterDogsHome() {
                     />
                     <span>{valuesForm.max}</span>
                 </ContenedorRange>
+                <label htmlFor="checbox_database">Creados</label>
+                <Input type="checkbox" id="checkbox_database" checked={valuesForm.database} onChange={handleChange} name="database"/>
                 <Select onChange={handleChange} value={valuesForm.temperament} name="temperament">
                     <option value="">Seleccionar Temperamento</option>
                     {
