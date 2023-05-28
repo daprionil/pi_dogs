@@ -2,7 +2,7 @@ import { useState } from "react";
 import { styled } from "styled-components";
 import { Link } from "react-router-dom";
 
-function CardDog({name, image, yearsOld, id, addDogFavorite, favorite}) {
+function CardDog({name, height, weight, image, id, addDogFavorite, favorite}) {
     const [favoriteState, setFavoriteState] = useState(favorite);
 
     const handleClickFavorite = () => {
@@ -19,7 +19,8 @@ function CardDog({name, image, yearsOld, id, addDogFavorite, favorite}) {
             </Link>
             <div className="info_dog">
                 <h3 className="name_title">{name}</h3>
-                <p><span>Edad <em>(Aprox)</em>: </span>{yearsOld}</p>
+                <p><span>Altura <em>(Aprox)</em>: </span>{height === 'NaN' ? 'no disponible':`${height}${!isNaN(height) ? ' cm' : ''}`}</p>
+                <p><span>Peso <em>(Aprox)</em>: </span>{weight === 'NaN' ? 'no disponible':`${weight}${!isNaN(weight) ? ' lb' : ''}`}</p>
             </div>
             <div
                 className="favorite_emoji"

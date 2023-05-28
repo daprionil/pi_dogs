@@ -9,6 +9,10 @@ const Select = styled.select`
     padding: 5px;
     text-align: center;
 
+    &:focus{
+        border: 2px solid rgba(0,0,0,0.2);
+    }
+
     & option{
         padding: 4px;
         color: white;

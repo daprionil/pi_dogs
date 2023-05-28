@@ -75,6 +75,7 @@ const HeaderStyled = styled.header`
                         padding: 4px 7px;
                         transition: all .3s ease;
                         border-radius: 5px;
+                        white-space: nowrap;
                         
                         font-weight: 700;
                         &:hover{

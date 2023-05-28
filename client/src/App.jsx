@@ -25,7 +25,7 @@ function App() {
     <div>
       <Routes>
         <Route path='/' element={<LandingPage />} />
-
+        
         <Route path='/home' element={<HomeDogsContext><Home /></HomeDogsContext>} />
         <Route path='/dogs/:idDog' element={<DogPageDetails />}/>
         <Route path='/medogs' element={<PageMeDogs />}/>

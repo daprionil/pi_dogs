@@ -13,8 +13,9 @@ function CardDogDetail({image, name, id, height, weight, yearsOld, Temperaments}
                     <p><span>#</span>{id.toString().slice(-2)}</p>
                 </div>
                 <div className="items_aspect">
-                    <h4>Altura Promedio: <span>{height}</span> <em>{!isNaN(height) && 'cm'}</em></h4>
+                    <h4>Altura Promedio: <span>{height === 'NaN' ? 'no disponible' : height }</span> <em>{!isNaN(height) && 'cm'}</em></h4>
                     <h4>Peso Promedio: <span>{weight}</span> <em>{!isNaN(weight) && 'lb'}</em></h4>
+                    <h4>Edad promedio: <span>{yearsOld}</span> <em>{!isNaN(yearsOld) && 'años'}</em></h4>
                 </div>
                 <h2>Temperamentos</h2>
                 <div className="temperaments">
@@ -56,7 +57,7 @@ const CardDogsStyled = styled.div`
             height: 100%;
 
             object-fit: cover;
-            object-position: 60%;
+            object-position: center;
             aspect-ratio: 3/2;
             filter: saturate(1.7);
         }
@@ -75,8 +76,8 @@ const CardDogsStyled = styled.div`
         .title{
             display: flex;
             align-items: center;
-            justify-content: left;
-            gap: 10px;
+            justify-content: center;
+            gap: 5px;
             p{
                 font-size: 1.8rem;
             }

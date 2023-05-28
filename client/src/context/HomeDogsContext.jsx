@@ -89,7 +89,6 @@ const initialState = {
 
 function HomeDogsContext({children}) {
     const [data, dispatch] = useReducer(reducerContext, initialState);
-    
     useEffect(() => {
         if(!data.page_current){
             const backCurrentPage = new URLSearchParams(window.location.search).get('page') || 0;
