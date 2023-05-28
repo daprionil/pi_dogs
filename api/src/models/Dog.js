@@ -30,14 +30,14 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
       set(value){
-        this.setDataValue('height',`${value}mts`);
+        this.setDataValue('height',`${value}cm`);
       }
     },
     weight:{
       type: DataTypes.STRING,
       allowNull: false,
       set(value){
-        this.setDataValue('weight',`${value}kg`);
+        this.setDataValue('weight',`${value}lb`);
       }
     },
     yearsOld:{
