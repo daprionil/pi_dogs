@@ -56,9 +56,11 @@ const ListFavoritesPage = styled.section`
         filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
         text-shadow:inset 0 0 5px rgba(0,0,0,0.1);
         
+
         background:linear-gradient(#202020, #ffffff64) ,url(${imageBackgroundText});
         background-size: contain;
         background-clip: text;
+        -webkit-background-clip: text;
         color: transparent;
     }
     & article{

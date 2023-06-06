@@ -1,55 +1,78 @@
 import { styled } from "styled-components";
 import Button from "../base_components/Button";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { changeCurrentPage, homeContext } from "../context/HomeDogsContext";
 
 function PaginatorDogsHome() {
     const [dataContextHome, dispatchHome] = useContext(homeContext);
     const numberPages = dataContextHome.filtered_dogs_context.length;
-    
+    const currentPage = Number(dataContextHome.page_current);
+    const pageButtonCurrentRef = useRef();
+
     //* It have a values to range paginator
     const [valuesRange, setValuesRange] = useState({initRange:0, finishRange:numberPages});
 
+    //* Change page current in with paginator
+    const changePageWithPaginator = nPage => {
+        dispatchHome(changeCurrentPage(nPage));
+    }
     const handleClick = (evt) => {
         const nPage = evt.target.getAttribute('data-page');
 
         //? Change current page
-        dispatchHome(changeCurrentPage(nPage));
+        changePageWithPaginator(nPage);
+    };
+
+    //* handle for Prev and Next Button
+    const handleRecursiveChangeCurrentPage = (valRefButton) => {
+        
+        //* Validate type handler action
+        if(valRefButton){
+            //* If the limit to paginator is surpassed
+            if(currentPage >= numberPages - 1) return;    
+            changePageWithPaginator(currentPage + 1);
+            return;
+        };
+
+        //* If the limit to paginator is surpassed
+        if(currentPage <= 0) return;
+        changePageWithPaginator(currentPage - 1);
     };
 
     //* If change any this values, set new Values to generate paginator
     useEffect(() => {
         //* Set dinamic paginator
-        const pageCurrent = Number(dataContextHome.page_current);
-        const initRange = numberPages > 8 && pageCurrent > 4 ?
-                            pageCurrent - 4 : 0;
-        const finishRange = numberPages > 8 && ((pageCurrent - 4) < numberPages - 4)
-                            ? pageCurrent + 4 : numberPages;
+        const initRange = numberPages > 8 && currentPage > 4 ?
+                            currentPage - 4 : 0;
+        const finishRange = numberPages > 8 && ((currentPage - 4) < numberPages - 4)
+                            ? currentPage + 4 : numberPages;
         setValuesRange({initRange, finishRange});
-
-        
+        //! QUEDO AQUÍ
     },[dataContextHome.filtered_dogs_context, dataContextHome.page_current])
 
     return (
         <PaginatorStyled onMouseMove={(e) => {e.target}}>
-            { (numberPages > 8 && Number(dataContextHome.page_current) - 4 > 0) && '...'}
+            <ButtonAux onClick={() => handleRecursiveChangeCurrentPage(false)}>Prev</ButtonAux>
+            { (numberPages > 8 && currentPage - 4 > 0) && '...'}
             {
                 Boolean(numberPages) && new Array(numberPages).fill('').map((e,i) =>(
                     <ButtonPaginator
+                        ref={ i === currentPage ? pageButtonCurrentRef : null}
                         value_page={i+1}
                         data-page={i}
                         key={i}
-                        onClick={handleClick.bind(i)}
+                        onClick={handleClick}
                     >{i}</ButtonPaginator>
                 )).slice(valuesRange.initRange, valuesRange.finishRange)
             }
-            { (numberPages > 8 && Number(dataContextHome.page_current) + 4 < numberPages) && '...'}
+            { (numberPages > 8 && currentPage + 4 < numberPages) && '...'}
+            <ButtonAux onClick={() => handleRecursiveChangeCurrentPage(true)}>Next</ButtonAux>
         </PaginatorStyled>
     );
 }
 
 const PaginatorStyled = styled.div`
-    max-width: 500px;
+    max-width: fit-content;
     margin: 0 auto;
 
     overflow-x: hidden;
@@ -111,6 +134,10 @@ const ButtonPaginator = styled(Button)`
 
         background: white;
     }
+`;
+const ButtonAux = styled(Button)`
+    font-size: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 `;
 
 export default PaginatorDogsHome;

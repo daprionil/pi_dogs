@@ -90,11 +90,11 @@ const initialState = {
 function HomeDogsContext({children}) {
     const [data, dispatch] = useReducer(reducerContext, initialState);
     useEffect(() => {
-        if(!data.page_current){
+        if(data.page_current === null){
             const backCurrentPage = new URLSearchParams(window.location.search).get('page') || 0;
             dispatch(changeCurrentPage(backCurrentPage));
             return;
-        }
+        };
         window.history.pushState({},'',`?page=${data.page_current}`);
     },[data.page_current]);
 

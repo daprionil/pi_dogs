@@ -15,7 +15,7 @@ const Select = styled.select`
 
     & option{
         padding: 4px;
-        color: white;
+        color: black;
     }
 `;
 
