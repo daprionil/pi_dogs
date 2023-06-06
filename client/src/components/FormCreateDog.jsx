@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../base_components/Message';
 import createADog from '../controllers/createADog';
 import { getDogs } from '../redux/createActions';
-import { validateFormOffset, validateSpecialValuesForm } from '../utils';
+import { validateFormEmptyFields, validateSpecialValuesForm } from '../utils';
 
 const initialStateFormValues = {
     name:'',
@@ -39,11 +39,11 @@ function FormCreateDog() {
         if(name === 'temperaments'){
             //* Extract values from selected option and select value
             changeValuesForm(state => {
+                if(value === '') return state;
+                
                 const nombre = target.selectedOptions[0].textContent;
-                return {
-                    ...state,
-                    temperaments: value === '' ? [...state.temperaments] : [...state.temperaments, {nombre, id:value}]
-                };
+                const newTemperament = {nombre, id:value};
+                return {...state, temperaments: [...state.temperaments, newTemperament]};
             });
             return;
         };
@@ -103,7 +103,7 @@ function FormCreateDog() {
     const validateFormByErrors = () => {
         let localError = '';
 
-        const [validateOffsetValues, errorsEmpty] = validateFormOffset(valuesForm);
+        const [validateOffsetValues, errorsEmpty] = validateFormEmptyFields(valuesForm);
         localError = errorsEmpty;
 
         //* If exist one error for empty values

@@ -68,9 +68,9 @@ const dictionaryValuesForm = {
     yearsOld: 'años de edad',
     image:'imagen',
 };
-const validateFormOffset = (values) => {
+const validateFormEmptyFields = (values) => {
     let localError = '';
-    
+
     const arrayEntries = Object.entries(values);
     const validation = arrayEntries.some( ([key,val]) => {
         //* Validate strings in form
@@ -138,6 +138,6 @@ export {
     getStorageValue,
     parseDogsPaginator,
     filteredDogsByAttributes,
-    validateFormOffset,
+    validateFormEmptyFields,
     validateSpecialValuesForm
 }

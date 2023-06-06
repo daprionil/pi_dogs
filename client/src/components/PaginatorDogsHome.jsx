@@ -1,4 +1,4 @@
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
 import Button from "../base_components/Button";
 import { useContext, useEffect, useRef, useState } from "react";
 import { changeCurrentPage, homeContext } from "../context/HomeDogsContext";
@@ -16,6 +16,7 @@ function PaginatorDogsHome() {
     const changePageWithPaginator = nPage => {
         dispatchHome(changeCurrentPage(nPage));
     }
+    
     const handleClick = (evt) => {
         const nPage = evt.target.getAttribute('data-page');
 
@@ -47,7 +48,6 @@ function PaginatorDogsHome() {
         const finishRange = numberPages > 8 && ((currentPage - 4) < numberPages - 4)
                             ? currentPage + 4 : numberPages;
         setValuesRange({initRange, finishRange});
-        //! QUEDO AQUÍ
     },[dataContextHome.filtered_dogs_context, dataContextHome.page_current])
 
     return (
@@ -61,6 +61,7 @@ function PaginatorDogsHome() {
                         value_page={i+1}
                         data-page={i}
                         key={i}
+                        activepagebutton={(currentPage === i) + ''}
                         onClick={handleClick}
                     >{i}</ButtonPaginator>
                 )).slice(valuesRange.initRange, valuesRange.finishRange)
@@ -134,6 +135,13 @@ const ButtonPaginator = styled(Button)`
 
         background: white;
     }
+    ${({activepagebutton}) => {
+        if(activepagebutton === 'true'){
+            return css`
+                background: red;
+            `;
+        }
+    }}
 `;
 const ButtonAux = styled(Button)`
     font-size: 1rem;
