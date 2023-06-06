@@ -59,10 +59,85 @@ const filteredDogsByAttributes = function(dogs,{min,max, temperament, database, 
     return filteredDogs;
 };
 
+//? FORM CREATEDOG FUNCTIONS
+//* Dictionaries
+const dictionaryValuesForm = {
+    name:'nombre',
+    height:'altura',
+    weight:'peso',
+    yearsOld: 'años de edad',
+    image:'imagen',
+};
+const validateFormOffset = (values) => {
+    let localError = '';
+    
+    const arrayEntries = Object.entries(values);
+    const validation = arrayEntries.some( ([key,val]) => {
+        //* Validate strings in form
+        if(typeof val === 'string'){
+            const validate = !val.trim().length;
+            if(validate){
+                localError = `El ${dictionaryValuesForm[key]} no puede estar vacío`
+            }
+            return validate;
+        };
+
+        //* Validate length in temperaments field
+        if(key === 'temperaments'){
+            const validate = !(val.length >= 2);
+            if(validate){
+                localError = `Debes de tener por lo menos 2 temperamentos`
+            };
+            return validate;
+        }
+        
+        //* Validate if this is a filed empty
+        const lastValidate = !val.length;
+        if(lastValidate){
+            localError = `El ${dictionaryValuesForm[key]} no es válido`
+        };
+        return lastValidate;
+    })
+    return [validation,localError];
+};
+
+//* Validate Values
+const limitValuesFunction = (val) => {
+    const parsedValue = parseInt(val);
+    return parsedValue > 0 && parsedValue <= 100
+};
+
+const specialValidationsFormCreateDog = {
+    height:limitValuesFunction,
+    weight:limitValuesFunction,
+    name: val => val.trim().length < 50,
+    yearsOld:limitValuesFunction,
+};
+
+const validateSpecialValuesForm = (values) => {
+    let localError = '';
+    const arrayEntries = Object.entries(values);
+    const validation = arrayEntries.some(([key,val]) => {
+        //* Get special validate for one field in the form
+        const specialValidate = specialValidationsFormCreateDog[key];
+    
+        if(specialValidate){
+            const validation = !specialValidate(val);
+            //* Set error to display
+            if(validation) localError = `El campo ${dictionaryValuesForm[key]} no es válido`;
+            return validation;
+        };
+        return false;
+    });
+    return [validation, localError]
+};
+
 export {
     parsedDogsFavorite,
     setStorageValue,
     getStorageValue,
     parseDogsPaginator,
-    filteredDogsByAttributes
+    filteredDogsByAttributes,
+    validateFormOffset,
+    validateSpecialValuesForm
 }

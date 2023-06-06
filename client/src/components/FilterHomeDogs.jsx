@@ -5,7 +5,7 @@ import Select from "../base_components/Select";
 import Button from "../base_components/Button";
 import FilterSvg from "../base_components/FilterSvg";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { homeContext, filterDogsContext, changeCurrentPage } from "../context/HomeDogsContext";
 
@@ -28,7 +28,7 @@ function FilterDogsHome() {
                 const maxValue = parseInt(value);
                 return {...state, [name]:maxValue, min:maxValue}
             };
-
+            
             //* If the field is a checkbox input
             if(type === 'checkbox'){
                 return {
@@ -43,21 +43,18 @@ function FilterDogsHome() {
             };
         });
     };
-    
-    //Send to context the properties to validate
-    const handleSubmit = evt => {
-        evt.preventDefault();
-        
+
+    useEffect(() => {
         //* Send values to filter data dogs
         dispatchContextHome(filterDogsContext({...valuesForm}));
-
+    
         //* Set current page in 0 to get dogs
         dispatchContextHome(changeCurrentPage('0'));
-    };
+    },[valuesForm]);
 
     return (
         <ContenedorFilterHome>
-            <FormFilter onSubmit={handleSubmit}>
+            <FormFilter>
                 <ContenedorRange>
                     <label htmlFor="min">Peso Mínimo</label>
                     <Input
@@ -102,7 +99,6 @@ function FilterDogsHome() {
                         ))
                     }
                 </Select>
-                <ButtonForm><FilterSvg /> Filtrar</ButtonForm>
             </FormFilter>
         </ContenedorFilterHome>
     );

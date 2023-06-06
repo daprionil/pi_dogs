@@ -36,7 +36,7 @@ function ListDogs({favorite_dogs}) {
                     Boolean(dogs.length) ? //If exist dogs for display
                         
                         dogs.map((dog,i) => {
-                            return <CardDog {...dog} addDogFavorite={addToFavoriteDog} key={dog.id}/>
+                            return <CardDog {...dog} addDogFavorite={addToFavoriteDog} key={i}/>
                         })
 
                     : <SectionDefaultNullish

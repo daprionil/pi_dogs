@@ -5,11 +5,12 @@ import Button from '../base_components/Button';
 import Select from '../base_components/Select';
 import Input from '../base_components/Input';
 import ElementTemperamentForm from './ElementTemperamentForm';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../base_components/Message';
 import createADog from '../controllers/createADog';
 import { getDogs } from '../redux/createActions';
+import { validateFormOffset, validateSpecialValuesForm } from '../utils';
 
 const initialStateFormValues = {
     name:'',
@@ -24,10 +25,14 @@ function FormCreateDog() {
     const dispatch = useDispatch();
     const all_temperaments = useSelector(({all_temperaments}) => all_temperaments);
     
+    const didMountRef = useRef(false);
+    
     const [message, setMessage] = useState('');
     const [valuesForm, changeValuesForm] = useState(initialStateFormValues);
 
     const handleChange = ({target}) => {
+        didMountRef.current = true;
+
         const {name, value} = target;
 
         //If attribute have a name equal to temperaments
@@ -54,6 +59,7 @@ function FormCreateDog() {
         e.preventDefault();
         const dataId = e.target.dataset.nameid;
         
+        //* Set values to temps in state
         changeValuesForm(state => ({
             ...state,
             temperaments: state.temperaments.filter(({id}) => id !== dataId)
@@ -63,77 +69,66 @@ function FormCreateDog() {
     const handleSubmit = async e => {
         e.preventDefault();
 
-        //* Validate possible empty values
-        let localError = '';
-        const arrayEntries = Object.entries(valuesForm);
-        const validateOffsetValues = arrayEntries.some( ([key,val]) => {
-            if(typeof val === 'string'){
-                const validate = !val.trim().length;
-                if(validate){
-                    localError = `El ${dictionaryValuesForm[key]} no puede estar vacío`
-                }
-                return validate;
-            };
-            if(key === 'temperaments'){
-                const validate = !(val.length >= 2);
-                if(validate){
-                    localError = `Debes de tener por lo menos 2 temperamentos`
-                };
-                return validate;
-            }
-            const lastValidate = !val.length;
-            if(lastValidate){
-                localError = `El ${dictionaryValuesForm[key]} no es válido`
-            };
-            return lastValidate;
-        });
-        if(validateOffsetValues){
-            setMessage({type:'error', message: localError});
-            return 
-        };
-        
-        //* Validate values with special validation
-        const validateSpecialValues = arrayEntries.some(([key,val]) => {
-            //* Get special validate for one field in the form
-            const specialValidate = specialValidationsFormCreateDog[key];
-
-            if(specialValidate){
-                const validation = !specialValidate(val);
-                //* Set error to display
-                if(validation) localError = `El campo ${dictionaryValuesForm[key]} no es válido`;
-                return validation;
-            };
-            return false;
-        });
-
         //* If not exist errors
-        if(!validateSpecialValues){
+        if(!message.message){
+            didMountRef.current = false;
+
             const temperamentsParsed = valuesForm.temperaments.map(({id}) => Number(id));
             const DogValuesToCreate = {...valuesForm, temperaments: temperamentsParsed};
             
-            //! USE CONTROLLER TO CREATE DOG
-            const data = await createADog(DogValuesToCreate);
-            
-            //If exist and error
-            if(data.error){
-                //* set error fetched from the database
-                setMessage({type:'error',message:data.error});
+            try {
+                //! USE CONTROLLER TO CREATE DOG
+                const data = await createADog(DogValuesToCreate);
+                
+                //If exist and error
+                if(data.error) throw new Error(data.error);
+                
+                //* Message Success create dog
+                setMessage({type:'success',message:'Tu Raza se ha Agregado'});
+                
+                //* Set dogs from API server in the Store
+                dispatch(getDogs());
+                
+                //* Reset errors and Values 
+                changeValuesForm(initialStateFormValues);
+                setTimeout(() => setMessage({type:'error',message:''}), 3000);
                 return;
-            };
-            
-            //* Message Success create dog
-            setMessage({type:'success',message:'Tu Raza se ha Agregado'});
-            
-            //* Set dogs from API server in the Store
-            dispatch(getDogs());
+            } catch ({message}) {
+                setMessage({type:'error',message});
+                return;
+            }
+        };
+    };
 
-            //* Reset errors and Values 
-            changeValuesForm(initialStateFormValues);
-            setTimeout(() => setMessage({type:'error',message:''}), 3000);
+    const validateFormByErrors = () => {
+        let localError = '';
+
+        const [validateOffsetValues, errorsEmpty] = validateFormOffset(valuesForm);
+        localError = errorsEmpty;
+
+        //* If exist one error for empty values
+        if(validateOffsetValues){
+            setMessage({type:'error', message: localError});
+            return
+        };
+
+        //* Validate values with special validation
+        const [validateSpecialValues, errorsSpecial] = validateSpecialValuesForm(valuesForm);
+        localError = errorsSpecial;
+
+        //* If don't exist errors
+        if(!validateSpecialValues){
+            setMessage('');
             return;
         };
+
         setMessage({type:'error',message:localError});
     };
+
+    useEffect(()=> {
+        if(!didMountRef.current) return;
+        validateFormByErrors();
+    },[valuesForm]);
 
     return (
         <FormStyled onSubmit={handleSubmit}>
@@ -263,27 +258,5 @@ const ListSelectTemperaments = styled.div`
     justify-content: center;
     gap: 5px;
 `;
-
-//* Dictionaries
-const dictionaryValuesForm = {
-    name:'nombre',
-    height:'altura',
-    weight:'peso',
-    yearsOld: 'años de edad',
-    image:'imagen',
-};
-
-//* Validate Values
-const limitValuesFunction = (val) => {
-    const parsedValue = parseInt(val);
-    return parsedValue > 0 && parsedValue <= 100
-};
-const specialValidationsFormCreateDog = {
-    height:limitValuesFunction,
-    weight:limitValuesFunction,
-    name: val => val.trim().length < 50,
-    yearsOld:limitValuesFunction,
-}
-
 
 export default FormCreateDog;
