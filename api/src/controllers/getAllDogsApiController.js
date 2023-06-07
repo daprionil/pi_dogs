@@ -1,6 +1,6 @@
 const { default: axios } = require('axios');
 
-const fixedDog = require('../utils/fixedDog');
+const {fixedDog} = require('../utils/fixedDog');
 const { URL_API, API_KEY } = process.env;
 
 module.exports = async function(){
