@@ -1,13 +1,12 @@
 import { css, styled } from "styled-components";
 import Button from "../base_components/Button";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { changeCurrentPage, homeContext } from "../context/HomeDogsContext";
 
 function PaginatorDogsHome() {
     const [dataContextHome, dispatchHome] = useContext(homeContext);
     const numberPages = dataContextHome.filtered_dogs_context.length;
     const currentPage = Number(dataContextHome.page_current);
-    const pageButtonCurrentRef = useRef();
 
     //* It have a values to range paginator
     const [valuesRange, setValuesRange] = useState({initRange:0, finishRange:numberPages});
@@ -57,7 +56,6 @@ function PaginatorDogsHome() {
             {
                 Boolean(numberPages) && new Array(numberPages).fill('').map((e,i) =>(
                     <ButtonPaginator
-                        ref={ i === currentPage ? pageButtonCurrentRef : null}
                         value_page={i+1}
                         data-page={i}
                         key={i}
@@ -129,6 +127,7 @@ const ButtonPaginator = styled(Button)`
         
         left: 0;
         bottom: -3px;
+        font-weight: 800;
         
         aspect-ratio: 1;
         border-radius: 50%;
@@ -138,7 +137,10 @@ const ButtonPaginator = styled(Button)`
     ${({activepagebutton}) => {
         if(activepagebutton === 'true'){
             return css`
-                background: red;
+                &::after{
+                    background: red;
+                    color: white;
+                }
             `;
         }
     }}
