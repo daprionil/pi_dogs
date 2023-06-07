@@ -3,6 +3,8 @@ const createDogController = require('../controllers/createDogController');
 const getDogByIdController = require('../controllers/getDogByIdController');
 const getDogsByNameController = require('../controllers/getDogsByNameController');
 
+const { validateValuesDog } = require('../utils/validateCreateDogUtils');
+
 //? GET return all dogs in database
 const getAllDogs = async (req, res) => {
     try {
@@ -56,12 +58,8 @@ const createDog = async (req, res) => {
             yearsOld,
             temperaments
         };
-        const validateValues = Object.entries(dataDog).some(([key,val]) => {
-            if(key === 'temperaments' && typeof val !== 'object'){
-                return true;
-            }
-            return !Boolean(typeof val === 'object' ? Object.values(val).length : val);
-        });
+        
+        const validateValues = validateValuesDog(dataDog);
 
         //* Control validations
         if(validateValues) throw new Error('No se encuentran todos los valores requeridos');
