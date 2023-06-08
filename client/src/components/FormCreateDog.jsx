@@ -43,6 +43,13 @@ function FormCreateDog() {
                 
                 const nombre = target.selectedOptions[0].textContent;
                 const newTemperament = {nombre, id:value};
+
+                //* If the temperament to add already exist
+                const validateExist = state.temperaments.some(({id:idDog}) => idDog === value);
+                if(validateExist){
+                    return {...state}
+                };
+
                 return {...state, temperaments: [...state.temperaments, newTemperament]};
             });
             return;
