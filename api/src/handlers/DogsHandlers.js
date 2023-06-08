@@ -4,6 +4,7 @@ const getDogByIdController = require('../controllers/getDogByIdController');
 const getDogsByNameController = require('../controllers/getDogsByNameController');
 
 const { validateValuesDog } = require('../utils/validateCreateDogUtils');
+const getErrorsCreated = require('../utils/errorsCreateDog');
 
 //? GET return all dogs in database
 const getAllDogs = async (req, res) => {
@@ -68,7 +69,8 @@ const createDog = async (req, res) => {
         const createdDog = await createDogController(dataDog);
 
         res.status(200).json(createdDog);
-    } catch ({ message }) {
+    } catch (error) {
+        const message = getErrorsCreated(error);
         res.status(400).json({error:message});
     };
 };
