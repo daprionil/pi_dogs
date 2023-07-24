@@ -12,6 +12,8 @@ import { getTemperaments } from './redux/createActions';
 
 import { useDispatch } from 'react-redux';
 import { getDogs } from './redux/createActions';
+import LogInPage from './pages/LogInPage';
+import SignInPage from './pages/SignInPage';
 
 function App() {
   const dispatch = useDispatch();
@@ -22,7 +24,7 @@ function App() {
   
   return (
     //! Definir Rutas
-    <div>
+    <>
       <Routes>
         <Route path='/' element={<LandingPage />} />
         
@@ -30,8 +32,11 @@ function App() {
         <Route path='/dogs/:idDog' element={<DogPageDetails />}/>
         <Route path='/medogs' element={<PageMeDogs />}/>
         <Route path='/createdog' element={<CreateDog/>} />
+
+        <Route path='/log-in' element={<LogInPage/>} />
+        <Route path='/sign-in' element={<SignInPage/>} />
       </Routes>
-    </div>
+    </>
   )
 }
 

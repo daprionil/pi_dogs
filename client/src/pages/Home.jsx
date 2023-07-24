@@ -10,6 +10,7 @@ import ListDogs from '../components/ListDogs';
 import { useContext, useEffect } from 'react';
 import { setDogsContext, homeContext, setLoading } from '../context/HomeDogsContext';
 import FilterDogsHome from '../components/FilterHomeDogs';
+import { Title } from 'react-head';
 
 
 function Home() {
@@ -25,11 +26,12 @@ function Home() {
             dispatchHome(setLoading(false));
             //* Set new Data in the state dogs context
             dispatchHome(setDogsContext(dogs));
-        };
+        }
     },[dogs]);
 
     return (
         <GroupPageDefault>
+            <Title>Dogest - Home</Title>
             <MainStyled>
                 <SearchBarHome dogsRedux={dogs}/>
                 <BannerHomePage />

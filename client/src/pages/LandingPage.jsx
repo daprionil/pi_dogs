@@ -4,10 +4,12 @@ import { NavLink } from 'react-router-dom';
 import Button from '../base_components/Button';
 import imgLandingBg from '../assets/bg_landing_page.webp';
 import imgBannerLanding from '../assets/icon_banner_landing_page.webp';
+import { Title } from "react-head";
 
 function LandingPage() {
     return (
         <LandingStyled>
+            <Title>Dogest - Bienvenida</Title>
             <section className="ctn-all">
                 <article className="info">
                     <h1>Redescubre tus Razas Favoritas</h1>

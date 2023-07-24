@@ -7,6 +7,7 @@ import getADog from "../controllers/getADog";
 import SectionDefaultNullish from '../components/SectionDefaultNullish';
 import Loader from '../base_components/Loader';
 import CardDogDetail from '../components/CardDogDetail';
+import { Title } from "react-head";
 
 function DogPageDetails() {
     const {idDog} = useParams();
@@ -22,18 +23,19 @@ function DogPageDetails() {
 
     return (
         <GroupPageDefault>
+            <Title>Dogest - {dog?.name || 'Detail'}</Title>
             <DetailsPageDogStyled>
                 {
                     loading ?
                         <Loader></Loader>
-                    : dog.hasOwnProperty('name')?
+                    : dog?.name ?
                         <CardDogDetail {...dog}/>
                         : <SectionDefaultNullish message="La Raza que Intentas ver no ha sido Encontrada"/>
                 }
             </DetailsPageDogStyled>
         </GroupPageDefault>
     );
-};
+}
 
 const DetailsPageDogStyled = styled.div`
     width: 100%;
