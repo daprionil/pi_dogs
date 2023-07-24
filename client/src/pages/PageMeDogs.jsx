@@ -6,23 +6,25 @@ import CardDog from "../components/CardDog";
 import { styled } from "styled-components";
 import { parsedDogsFavorite } from "../utils";
 import { addDogFavorite, deleteDogFavorite } from "../redux/createActions";
+import { Title } from 'react-head';
 
 function PageMeDogs() {
     const dispatchRedux = useDispatch();
     const dogsFavorites = useSelector(({favorite_dogs}) => {
-        return parsedDogsFavorite([...favorite_dogs.entries()].map(([l,dog]) => dog), favorite_dogs);
+        return parsedDogsFavorite([...favorite_dogs.entries()].map(([,dog]) => dog), favorite_dogs);
     });
     
     const addToFavoriteDog = (id, favorite) => {
         if(favorite){
             dispatchRedux(deleteDogFavorite(id));
             return;
-        };
+        }
         dispatchRedux(addDogFavorite(id));
     };
 
     return (
         <GroupPageDefault>
+            <Title>Dogest - Favoritos</Title>
             <ListFavoritesPage>
                 <h1>Mi Lista de Favoritos</h1>
                 <article>
@@ -35,7 +37,7 @@ function PageMeDogs() {
             </ListFavoritesPage>
         </GroupPageDefault>
     );
-};
+}
 
 const ListFavoritesPage = styled.section`
     padding: 0 10px;

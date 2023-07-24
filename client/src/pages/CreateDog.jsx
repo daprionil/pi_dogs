@@ -2,10 +2,12 @@ import styled from 'styled-components';
 import GroupPageDefault from "../components/GroupPageDefault";
 import FormCreateDog from '../components/FormCreateDog';
 import ImageSide from '../assets/bg_landing_page.webp';
+import { Title } from 'react-head';
 
 function CreateDog() {
     return (
         <GroupPageDefault>
+            <Title>Dogest - Crear una Raza</Title>
             <ContenedorCreateDog>
                 <TituloCreateDog>¡Crear tu Raza!</TituloCreateDog>
                 <section>
@@ -15,7 +17,7 @@ function CreateDog() {
             </ContenedorCreateDog>
         </GroupPageDefault>
     );
-};
+}
 
 const TituloCreateDog = styled.h1`
     text-align: center;
