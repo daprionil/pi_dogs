@@ -5,8 +5,27 @@ import Button from "../base_components/Button";
 import { Link } from "react-router-dom";
 import Input from "../base_components/Input";
 import Form from "../base_components/Form";
+import { useState } from "react";
+import { validateValues } from "../utils/formAuthValidation";
 
 const SignInPage = () => {
+    const [errors, setErrors] = useState([]);
+    const [valuesForm, changeValuesForm] = useState({
+        email:"",
+        password:"",
+        password2:""
+    });
+
+    const handleChangeFormValues = ({target:{value, name}}) => {
+        changeValuesForm(state => {
+            const values = {
+                ...state,
+                [name]:value
+            };
+            setErrors(Object.fromEntries(validateValues(values)));
+            return values;
+        });
+    };
 
     return (
         <GroupPageDefault>
@@ -25,17 +44,32 @@ const SignInPage = () => {
                             Iniciar Sesion
                         </Button>
                     </div>
+                    {
+                        errors['email'] && <TextErrorValidationField>{errors['email']}</TextErrorValidationField>
+                    }
                     <Input
+                        value={valuesForm.email}
+                        onChange={handleChangeFormValues}
                         type="text"
                         placeholder="Correo Electrónico"
                         name="email"
                     />
+                    {
+                        errors['password'] && <TextErrorValidationField>{errors['password']}</TextErrorValidationField>
+                    }
                     <Input
+                        value={valuesForm.password}
+                        onChange={handleChangeFormValues}
                         type="password"
                         placeholder="Contraseña"
                         name="password"
                     />
+                    {
+                        errors['password2'] && <TextErrorValidationField>{errors['password2']}</TextErrorValidationField>
+                    }
                     <Input
+                        value={valuesForm.password2}
+                        onChange={handleChangeFormValues}
                         type="password"
                         placeholder="Repite tu Contraseña"
                         name="password2"
@@ -71,6 +105,13 @@ const ButtonSignIn = styled(Button)`
     background: red;
     color: white;
     font-size: 1rem;
+`;
+
+const TextErrorValidationField = styled.p`
+    color: red;
+    font-weight: 500;
+    font-size: .9rem;
+    margin: 0;
 `;
 
 export default SignInPage
