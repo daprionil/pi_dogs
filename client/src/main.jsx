@@ -7,15 +7,18 @@ import { HeadProvider } from 'react-head';
 import App from './App';
 import './index.css';
 import store from './redux/store';
+import AuthProvider from './context/AuthProvider';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
+      <AuthProvider>
         <HeadProvider>
-          <App />
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
         </HeadProvider>
-      </BrowserRouter>
+      </AuthProvider>
     </Provider>
   </React.StrictMode>,
 )

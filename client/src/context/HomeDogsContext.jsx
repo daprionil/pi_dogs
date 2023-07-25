@@ -94,7 +94,7 @@ function HomeDogsContext({children}) {
             const backCurrentPage = new URLSearchParams(window.location.search).get('page') || 0;
             dispatch(changeCurrentPage(backCurrentPage));
             return;
-        };
+        }
         window.history.pushState({},'',`?page=${data.page_current}`);
     },[data.page_current]);
 
@@ -103,7 +103,7 @@ function HomeDogsContext({children}) {
             {children}
         </homeContext.Provider>
     );
-};
+}
 
 export default HomeDogsContext;
 export {

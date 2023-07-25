@@ -4,7 +4,7 @@ import getDogsByName from "../controllers/getDogsByName";
 import { useContext } from "react";
 import { changeCurrentPage, homeContext, setDogsContext, setLoading } from "../context/HomeDogsContext";
 
-function SearchBarHome({dogsRedux}) {
+function SearchBarHome({ dogsRedux }) {
     const [,dispatchContextHome] = useContext(homeContext);
 
     const handleSubmit = evt => {
@@ -29,7 +29,7 @@ function SearchBarHome({dogsRedux}) {
                     dispatchContextHome(setLoading(false));
                 });
             return;
-        };
+        }
 
         //* If Dont exist a value to search
         if(!val){
