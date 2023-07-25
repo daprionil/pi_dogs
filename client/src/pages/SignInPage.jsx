@@ -59,10 +59,10 @@ const SignInPage = () => {
                 changeValuesForm(initialValuesForm);
                 
                 //? Redirect user to home page
-                setTimeout(() => navigate('/home'));
+                setTimeout(() => navigate('/home'), 2000);
             })
-            .catch(error => {
-                changeMessageState(errorAuthFirebase[error.code], ERROR_TYPE_MESSAGE);
+            .catch(({code}) => {
+                changeMessageState(errorAuthFirebase[code]  ?? 'Ha ocurrido un error', ERROR_TYPE_MESSAGE);
             })
             .finally(() => {
                 setLoading(false);
@@ -155,13 +155,6 @@ const ButtonSignIn = styled(Button)`
     background: red;
     color: white;
     font-size: 1rem;
-`;
-
-const TextErrorValidationField = styled.p`
-    color: red;
-    font-weight: 500;
-    font-size: .9rem;
-    margin: 0;
 `;
 
 export default SignInPage

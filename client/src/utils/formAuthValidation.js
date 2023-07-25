@@ -1,10 +1,10 @@
-const messageEmptyFieldValue = {
+export const messageEmptyFieldValue = {
     email: 'El Correo Electrónico no puede estar vacío',
     password: 'La contraseña no puede estar vacía',
     password2: 'La contraseña de validación no puede estar vacía'
 };
 
-const messageSpecialValidationField = {
+export const messageSpecialValidationField = {
     email: 'El Correo Electrónico no es válido',
     password: 'La contraseña debe contener mayusculas, minusculas y 3 números ',
     password2: 'Las contraseñas no coinciden'
