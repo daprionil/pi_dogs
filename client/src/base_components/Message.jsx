@@ -23,6 +23,9 @@ const ContentMessage =  styled.div`
     }
 `;
 
+export const ERROR_TYPE_MESSAGE = 'error';
+export const SUCCESS_TYPE_MESSAGE = 'success';
+
 const colorsType = {
     error:'#ff4116',
     success:'#00f024'

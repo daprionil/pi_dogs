@@ -38,8 +38,6 @@ const validateValues = (values) => {
         }
     }
 
-    console.log(errors);
-
     return errors || null;
 };
 

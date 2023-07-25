@@ -32,7 +32,7 @@ function PaginatorDogsHome() {
             if(currentPage >= numberPages - 1) return;    
             changePageWithPaginator(currentPage + 1);
             return;
-        };
+        }
 
         //* If the limit to paginator is surpassed
         if(currentPage <= 0) return;
