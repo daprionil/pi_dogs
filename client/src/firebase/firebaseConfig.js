@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import firestore from 'firebase/firestore';
-import authentication from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_APP_APIKEY ,
@@ -11,12 +11,13 @@ const firebaseConfig = {
     appId: import.meta.env.VITE_FIREBASE_APP_APPID 
 }
 
+
 const app = initializeApp(firebaseConfig);
-const db = firestore(app);
-const auth = authentication(app);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
 export {
+    db,
     app,
-    auth,
-    db
+    auth
 }

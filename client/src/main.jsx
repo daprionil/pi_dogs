@@ -7,6 +7,7 @@ import { HeadProvider } from 'react-head';
 import App from './App';
 import './index.css';
 import store from './redux/store';
+import { db } from './firebase/firebaseConfig';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

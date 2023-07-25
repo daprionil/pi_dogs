@@ -10,6 +10,6 @@ async function createADog({image, name, height, weight, yearsOld, temperaments})
     const response = await fetch(`${import.meta.env.VITE_URL_API}/dogs`,optionsFetch);
     const createdDog = await response.json();
     return createdDog;
-};
+}
 
 export default createADog;
