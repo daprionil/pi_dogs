@@ -19,10 +19,10 @@ function LandingPage() {
                     </div>
                     <div className="buttons">
                         <NavLink to='/home'>
-                            <Button>Comenzar</Button>
+                            <Button style={{fontSize:'1.7rem'}}>Comenzar</Button>
                         </NavLink>
                         <NavLink to='/createDog'>
-                            <Button bgcolor="red" color="white">Crear una Raza</Button>
+                            <Button bgcolor="red" style={{fontSize:'1.7rem'}} color="white">Crear una Raza</Button>
                         </NavLink>
                     </div>
                 </article>
