@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { getDogs } from './redux/createActions';
 import LogInPage from './pages/LogInPage';
 import SignInPage from './pages/SignInPage';
+import PrivateAuthRoute from './components/PrivateAuthRoute';
 
 function App() {
   const dispatch = useDispatch();
@@ -30,11 +31,11 @@ function App() {
         
         <Route path='/home' element={<HomeDogsContext><Home /></HomeDogsContext>} />
         <Route path='/dogs/:idDog' element={<DogPageDetails />}/>
-        <Route path='/medogs' element={<PageMeDogs />}/>
-        <Route path='/createdog' element={<CreateDog/>} />
+        <Route path='/medogs' element={<PrivateAuthRoute><PageMeDogs /></PrivateAuthRoute>}/>
+        <Route path='/createdog' element={<PrivateAuthRoute><CreateDog/></PrivateAuthRoute>} />
 
-        <Route path='/log-in' element={<LogInPage/>} />
-        <Route path='/sign-in' element={<SignInPage/>} />
+        <Route path='/log-in' element={<PrivateAuthRoute loged><LogInPage/></PrivateAuthRoute>} />
+        <Route path='/sign-in' element={<PrivateAuthRoute loged><SignInPage/></PrivateAuthRoute>} />
       </Routes>
     </>
   )
