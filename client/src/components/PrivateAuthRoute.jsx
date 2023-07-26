@@ -7,7 +7,7 @@ function PrivateAuthRoute({ children }) {
     return (
         usuario ?
             children
-        : <Navigate />
+        : <Navigate to="/log-in" replace/>
     );
 }
 
