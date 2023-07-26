@@ -2,24 +2,42 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 import DogestIcon from '../base_components/DogestIcon';
+import { useAuthFirebase } from '../context/AuthProvider';
+import LogInButton from './LogInButton';
+import LogOutButton from './LogOutButton';
+import SignInButton from './SignInButton';
 
 function Header() {
+    const usuario = useAuthFirebase();
+
     return (
         <HeaderStyled className="ctn_main_header">
             <NavLink to='/home'>
-                <DogestIcon styles={{width:"100px"}} />
+                <DogestIcon styles={{width:"83px"}} />
             </NavLink>
             <nav className='nav_menu'>
                 <ul className='list_menu'>
                     <li className='item_menu'>
                         <NavLink to="/home">Home</NavLink>
                     </li>
-                    <li className='item_menu'>
-                        <NavLink to="/medogs">Mis Dogs</NavLink>
-                    </li>
-                    <li className='item_menu create_dog'>
-                        <NavLink to="/createdog">Crear Tu Dog</NavLink>
-                    </li>
+                    {
+                        usuario ?
+                            <>
+                                <li className='item_menu'>
+                                    <NavLink to="/medogs">Mis Dogs</NavLink>
+                                </li>
+                                <li className='item_menu create_dog'>
+                                    <NavLink to="/createdog">Crear Tu Dog</NavLink>
+                                </li>
+                                <li>
+                                    <LogOutButton />
+                                </li>
+                            </>
+                        :   <>
+                                <LogInButton />
+                                <SignInButton />
+                            </>
+                    }
                 </ul>
             </nav>
         </HeaderStyled>
