@@ -8,12 +8,12 @@ function PrivateAuthRoute({ children, loged }) {
         /* If the route requires the user is not logged in */
         loged ?
             usuario ?
-                <Navigate to='/' replace />
+                <Navigate to='/home' replace />
             : children
         /* If the route requires the user to be logged */
         : usuario ?
-            children    
-        : <Navigate to="/log-in" replace />
+            children
+        : (<Navigate to="/log-in" replace />)
     );
 }
 
