@@ -6,7 +6,6 @@ const LogInButton = () => {
     <Button
       bgcolor="red"
       color="white"
-      style={{fontSize:'1rem'}}
       as={Link}
       to="/log-in"
     >Iniciar Sesion</Button>
