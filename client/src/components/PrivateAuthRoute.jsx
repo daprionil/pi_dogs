@@ -1,6 +1,7 @@
 import { useAuthFirebase } from '../context/AuthProvider';
 import { Navigate } from 'react-router-dom';
 
+// eslint-disable-next-line react/prop-types
 function PrivateAuthRoute({ children, loged }) {
     const usuario = useAuthFirebase();
     
@@ -8,7 +9,7 @@ function PrivateAuthRoute({ children, loged }) {
         /* If the route requires the user is not logged in */
         loged ?
             usuario ?
-                <Navigate to='/home' replace />
+                (<Navigate to='/home' replace />)
             : children
         /* If the route requires the user to be logged */
         : usuario ?

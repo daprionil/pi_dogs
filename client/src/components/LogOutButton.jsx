@@ -5,7 +5,7 @@ import { auth } from '../firebase/firebaseConfig';
 import Button from "../base_components/Button"
 const LogOutButton = () => {
     const handleClickLogOut = () => {
-        signOut(auth).then(console.log);
+        signOut(auth);
     };
 
     return (

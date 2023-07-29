@@ -48,7 +48,7 @@ const getDogsFavorite = ({uid}) => {
 };
 
 const deleteDogFavorite = ({uid, nameDog}) => {
-    return async function(dispatch){
+    return function(dispatch){
         deleteFavoriteDogFirebase({nameDog, uid}).then((favorite_dogs) => {
             dispatch({
                 type: SET_DOG_FAVORITE,
