@@ -1,7 +1,7 @@
 import { ADD_DOGS, SET_DOG_FAVORITE, SET_TEMPERAMENTS } from './actionTypes';
 
 const initialState = {
-    favorite_dogs: [],
+    favorite_dogs: null,
     all_dogs:[],
     all_temperaments:[]
 };
@@ -9,7 +9,8 @@ const initialState = {
 const rootReducer = function(state = initialState, {type, payload}){
     const typeAction = ({
         [`${ADD_DOGS}`]: () => {
-            const favorites = state.favorite_dogs.map(({id}) => id);
+            const favoritesState = state.favorite_dogs ?? [];
+            const favorites = favoritesState.map(({id}) => id);
             const newDogsWithFavorites = new Set([...payload.map(dog => (
                 {...dog, favorite: favorites.includes(dog.id)}
             ))]);
