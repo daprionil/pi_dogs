@@ -23,7 +23,7 @@ function Home() {
     //* Set dogs in local Component state
     useEffect(() => {
         dispatchHome(setLoading(true));
-        if(usuario && !favorite_dogs.length) return;
+        if(usuario && !favorite_dogs) return;
         if(all_dogs.length){
             dispatchHome(setLoading(false));
             //* Set new Data in the state dogs context
