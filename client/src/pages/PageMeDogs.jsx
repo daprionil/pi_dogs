@@ -12,16 +12,17 @@ import { useAuthFirebase } from '../context/AuthProvider';
 import getFavoriteDogs from '../controllers/getFavoriteDogs';
 
 function PageMeDogs() {
+    const usuario = useAuthFirebase();
     const dispatchRedux = useDispatch();
     const dogsFavorites = useSelector(({favorite_dogs}) => favorite_dogs);
     const { uid } = useAuthFirebase();
     
     const addToFavoriteDog = ({id, dogData, favorite}) => {
         if(favorite){
-            dispatchRedux(deleteDogFavorite(id));
+            dispatchRedux(deleteDogFavorite({nameDog: dogData.name, uid: usuario.uid}));
             return;
         }
-        dispatchRedux(addDogFavorite({id, uid, dogData}));
+        dispatchRedux(addDogFavorite({id, uid: usuario.uid, dogData}));
     };
 
     useEffect(() => {
