@@ -9,14 +9,15 @@ import { Title } from 'react-head';
 import { useEffect } from 'react';
 
 import { useAuthFirebase } from '../context/AuthProvider';
-import getFavoriteDogs from '../controllers/getFavoriteDogs';
+import { getDogsFavorite } from '../redux/createActions';
 
 function PageMeDogs() {
     const usuario = useAuthFirebase();
     const dispatchRedux = useDispatch();
-    const dogsFavorites = useSelector(({favorite_dogs}) => favorite_dogs);
+    const dogsFavorites = useSelector(({all_dogs}) => all_dogs.filter(({favorite}) => favorite));
     const { uid } = useAuthFirebase();
     
+    //? This function is executed by each card for DogFavorite
     const addToFavoriteDog = ({id, dogData, favorite}) => {
         if(favorite){
             dispatchRedux(deleteDogFavorite({nameDog: dogData.name, uid: usuario.uid}));
@@ -26,7 +27,7 @@ function PageMeDogs() {
     };
 
     useEffect(() => {
-        getFavoriteDogs(uid).then(console.log);
+        dispatchRedux(getDogsFavorite({uid}));
     },[]);
 
     return (
@@ -37,7 +38,12 @@ function PageMeDogs() {
                 <article>
                     {
                         dogsFavorites.length && dogsFavorites.map(dog => (
-                            <CardDog addDogFavorite={addToFavoriteDog} {...dog} key={dog.id}/>
+                            <CardDog
+                                existUser={!!usuario}
+                                addDogFavorite={addToFavoriteDog}
+                                {...dog}
+                                key={dog.id}
+                            />
                         ))
                     }
                 </article>

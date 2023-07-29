@@ -14,6 +14,7 @@ function ListDogs() {
     const [dataContextHome] = useHomeContext();
     const dogs = [...dataContextHome.filtered_dogs_context[dataContextHome.page_current ?? 0] || []]
 
+    //? This function is executed by each card for DogFavorite
     const addToFavoriteDog = ({id, dogData, favorite}) => {
         if(favorite){
             dispathRedux(deleteDogFavorite({nameDog: dogData.name, uid: usuario.uid}));
