@@ -7,23 +7,20 @@ import Loader from '../base_components/Loader';
 import { useDispatch } from "react-redux";
 
 import { addDogFavorite, deleteDogFavorite } from "../redux/createActions";
-import { parsedDogsFavorite } from "../utils";
+import { useAuthFirebase } from "../context/AuthProvider";
 
-function ListDogs({favorite_dogs}) {
+function ListDogs() {
     const dispathRedux = useDispatch();
-
+    const usuario = useAuthFirebase();
     const [dataContextHome] = useContext(homeContext);
-    const dogs = parsedDogsFavorite(
-        dataContextHome.filtered_dogs_context[dataContextHome.page_current ?? 0] || [],
-        favorite_dogs
-    );
-    
-    const addToFavoriteDog = (id, favorite) => {
+    const dogs = [...dataContextHome.filtered_dogs_context[dataContextHome.page_current ?? 0] || []]
+
+    const addToFavoriteDog = ({id, dogData, favorite}) => {
         if(favorite){
             dispathRedux(deleteDogFavorite(id));
             return;
         }
-        dispathRedux(addDogFavorite(id));
+        dispathRedux(addDogFavorite({id, uid: usuario.uid, dogData}));
     };
 
     return (
@@ -33,10 +30,10 @@ function ListDogs({favorite_dogs}) {
                 dataContextHome.loading ?
                     <Loader></Loader>
                 :
-                    Boolean(dogs.length) ? //If exist dogs for display
+                    dogs.length ? //If exist dogs for display
                         
                         dogs.map((dog,i) => {
-                            return <CardDog {...dog} addDogFavorite={addToFavoriteDog} key={i}/>
+                            return <CardDog {...dog} existUser={!!usuario} addDogFavorite={addToFavoriteDog} key={i}/>
                         })
 
                     : <SectionDefaultNullish

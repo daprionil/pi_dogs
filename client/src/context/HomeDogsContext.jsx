@@ -1,5 +1,8 @@
 import { createContext, useEffect, useReducer } from "react";
 import { parseDogsPaginator, filteredDogsByAttributes } from "../utils";
+import { useAuthFirebase } from "./AuthProvider";
+import { getDogsFavorite } from "../redux/createActions";
+import { useDispatch } from "react-redux";
 
 const homeContext = createContext();
 
@@ -88,6 +91,8 @@ const initialState = {
 };
 
 function HomeDogsContext({children}) {
+    const usuario = useAuthFirebase();
+    const dispatchRedux = useDispatch();
     const [data, dispatch] = useReducer(reducerContext, initialState);
     useEffect(() => {
         if(data.page_current === null){
@@ -97,6 +102,12 @@ function HomeDogsContext({children}) {
         }
         window.history.pushState({},'',`?page=${data.page_current}`);
     },[data.page_current]);
+
+    useEffect(() => {
+        if(usuario){
+            dispatchRedux(getDogsFavorite({uid:usuario.uid}));
+        }
+    },[]);
 
     return (
         <homeContext.Provider value={[data, dispatch]}>

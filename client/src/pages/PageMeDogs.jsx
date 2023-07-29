@@ -4,23 +4,29 @@ import { useDispatch, useSelector } from "react-redux";
 import GroupPageDefault from "../components/GroupPageDefault";
 import CardDog from "../components/CardDog";
 import { styled } from "styled-components";
-import { parsedDogsFavorite } from "../utils";
 import { addDogFavorite, deleteDogFavorite } from "../redux/createActions";
 import { Title } from 'react-head';
+import { useEffect } from 'react';
+
+import { useAuthFirebase } from '../context/AuthProvider';
+import getFavoriteDogs from '../controllers/getFavoriteDogs';
 
 function PageMeDogs() {
     const dispatchRedux = useDispatch();
-    const dogsFavorites = useSelector(({favorite_dogs}) => {
-        return parsedDogsFavorite([...favorite_dogs.entries()].map(([,dog]) => dog), favorite_dogs);
-    });
+    const dogsFavorites = useSelector(({favorite_dogs}) => favorite_dogs);
+    const { uid } = useAuthFirebase();
     
-    const addToFavoriteDog = (id, favorite) => {
+    const addToFavoriteDog = ({id, dogData, favorite}) => {
         if(favorite){
             dispatchRedux(deleteDogFavorite(id));
             return;
         }
-        dispatchRedux(addDogFavorite(id));
+        dispatchRedux(addDogFavorite({id, uid, dogData}));
     };
+
+    useEffect(() => {
+        getFavoriteDogs(uid).then(console.log);
+    },[]);
 
     return (
         <GroupPageDefault>
@@ -29,7 +35,7 @@ function PageMeDogs() {
                 <h1>Mi Lista de Favoritos</h1>
                 <article>
                     {
-                        Boolean(dogsFavorites.length) && dogsFavorites.map(dog => (
+                        dogsFavorites.length && dogsFavorites.map(dog => (
                             <CardDog addDogFavorite={addToFavoriteDog} {...dog} key={dog.id}/>
                         ))
                     }

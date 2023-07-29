@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import GroupPageDefault from '../components/GroupPageDefault'
 import BannerHomePage from '../components/BannerHomePage';
@@ -11,32 +11,34 @@ import { useContext, useEffect } from 'react';
 import { setDogsContext, homeContext, setLoading } from '../context/HomeDogsContext';
 import FilterDogsHome from '../components/FilterHomeDogs';
 import { Title } from 'react-head';
+import { useAuthFirebase } from '../context/AuthProvider';
 
 
 function Home() {
     //* Get dogs from Global Store
-    const {all_dogs:dogs,favorite_dogs} = useSelector(({all_dogs,favorite_dogs}) => ({all_dogs,favorite_dogs}));
-    
+    const usuario = useAuthFirebase();
     const [,dispatchHome] = useContext(homeContext);
+    const {all_dogs, favorite_dogs} = useSelector(({all_dogs, favorite_dogs}) => ({all_dogs, favorite_dogs}));
 
     //* Set dogs in local Component state
     useEffect(() => {
         dispatchHome(setLoading(true));
-        if(dogs.length){
+        if(usuario && !favorite_dogs.length) return;
+        if(all_dogs.length){
             dispatchHome(setLoading(false));
             //* Set new Data in the state dogs context
-            dispatchHome(setDogsContext(dogs));
+            dispatchHome(setDogsContext(all_dogs));
         }
-    },[dogs]);
+    },[all_dogs]);
 
     return (
         <GroupPageDefault>
             <Title>Dogest - Home</Title>
             <MainStyled>
-                <SearchBarHome dogsRedux={dogs}/>
+                <SearchBarHome dogsRedux={all_dogs}/>
                 <BannerHomePage />
                 <FilterDogsHome />
-                <ListDogs favorite_dogs={favorite_dogs}/>
+                <ListDogs />
                 <PaginatorDogsHome />
             </MainStyled>
         </GroupPageDefault>

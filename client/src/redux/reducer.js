@@ -1,11 +1,7 @@
-import { ADD_DOGS, ADD_DOG_FAVORITE, DELETE_DOG_FAVORITE, NAME_STORAGE_FAVORITES, SET_TEMPERAMENTS } from './actionTypes';
-import {getStorageValue, parsedDogsFavorite} from '../utils';
-import { setStorageValue } from '../utils';
-
-const storageFavoritesValues = getStorageValue(NAME_STORAGE_FAVORITES);
+import { ADD_DOGS, SET_DOG_FAVORITE, SET_TEMPERAMENTS } from './actionTypes';
 
 const initialState = {
-    favorite_dogs: new Map(storageFavoritesValues),
+    favorite_dogs: [],
     all_dogs:[],
     all_temperaments:[]
 };
@@ -13,38 +9,26 @@ const initialState = {
 const rootReducer = function(state = initialState, {type, payload}){
     const typeAction = ({
         [`${ADD_DOGS}`]: () => {
-            const {favorite_dogs} = state;
-            const newDogs = parsedDogsFavorite(payload, favorite_dogs);
-
+            const favorites = state.favorite_dogs.map(({id}) => id);
+            const newDogsWithFavorites = new Set([...payload.map(dog => (
+                {...dog, favorite: favorites.includes(dog.id)}
+            ))]);
+            
             return {
                 ...state,
-                all_dogs: newDogs
+                all_dogs: [...newDogsWithFavorites]
             }
         },
-        [`${ADD_DOG_FAVORITE}`]:() => {
-            //* Find dog in AllDogs to Add in FavoriteDogs
-            const dog = state.all_dogs.find(({id}) => id === payload);
-            const newFavoriteDogs = new Map([...state.favorite_dogs]);
-            newFavoriteDogs.set(payload, {...dog, favorite: true});
-
-            //? Set values in the storage
-            setStorageValue(NAME_STORAGE_FAVORITES, [...newFavoriteDogs])
+        [`${SET_DOG_FAVORITE}`]:() => {
+            const favorites = payload.map(({id}) => id);
+            const newDogsWithFavorites = new Set([...state.all_dogs.map(dog => (
+                {...dog, favorite: favorites.includes(dog.id)}
+            ))]);
 
             return {
                 ...state,
-                favorite_dogs: newFavoriteDogs
-            };
-        },
-        [`${DELETE_DOG_FAVORITE}`]:() => {
-            const dogsPrev = new Map([...state.favorite_dogs]);
-            dogsPrev.delete(payload);
-
-            //? Set values in the storage
-            setStorageValue(NAME_STORAGE_FAVORITES, [...dogsPrev]);
-
-            return {
-                ...state,
-                favorite_dogs: dogsPrev
+                all_dogs: [...newDogsWithFavorites],
+                favorite_dogs: favorites
             };
         },
         [`${SET_TEMPERAMENTS}`]: () => {

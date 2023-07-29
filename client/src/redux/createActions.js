@@ -2,10 +2,11 @@ import getAllTemperaments from '../controllers/getAllTemperaments';
 import getAllDogs from '../controllers/getAllDogs';
 import {
     ADD_DOGS,
-    ADD_DOG_FAVORITE,
-    DELETE_DOG_FAVORITE,
+    SET_DOG_FAVORITE,
     SET_TEMPERAMENTS
 } from './actionTypes';
+import addFavoriteDogFirebase from '../controllers/addFavoriteDogFirebase';
+import getFavoriteDogs from '../controllers/getFavoriteDogs';
 
 //getAllTemperaments
 
@@ -23,13 +24,30 @@ const getTemperaments = function(){
     };
 };
 
-const addDogFavorite = (id) => ({
-    type: ADD_DOG_FAVORITE,
-    payload:id   
-});
+const addDogFavorite = ({uid, dogData}) => {
+    return function(dispatch){
+        addFavoriteDogFirebase(uid, dogData).then((favorite_dogs) => {
+            dispatch({
+                type: SET_DOG_FAVORITE,
+                payload: favorite_dogs
+            })
+        });
+    }
+};
+
+const getDogsFavorite = ({uid}) => {
+    return function(dispatch){
+        getFavoriteDogs(uid).then(favorite_dogs => {
+            dispatch({
+                type: SET_DOG_FAVORITE,
+                payload: favorite_dogs
+            })
+        });
+    }
+};
 
 const deleteDogFavorite = (id) => ({
-    type: DELETE_DOG_FAVORITE,
+    type: SET_DOG_FAVORITE,
     payload:id 
 });
 
@@ -37,5 +55,6 @@ export {
     getDogs,
     addDogFavorite,
     deleteDogFavorite,
-    getTemperaments
+    getTemperaments,
+    getDogsFavorite
 }

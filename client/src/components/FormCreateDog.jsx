@@ -48,12 +48,12 @@ function FormCreateDog() {
                 const validateExist = state.temperaments.some(({id:idDog}) => idDog === value);
                 if(validateExist){
                     return {...state}
-                };
+                }
 
                 return {...state, temperaments: [...state.temperaments, newTemperament]};
             });
             return;
-        };
+        }
 
         //Rest field in state
         changeValuesForm(state => ({
@@ -104,7 +104,7 @@ function FormCreateDog() {
                 setMessage({type:'error',message});
                 return;
             }
-        };
+        }
     };
 
     const validateFormByErrors = () => {

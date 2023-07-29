@@ -2,12 +2,22 @@ import { useState } from "react";
 import { styled } from "styled-components";
 import { Link } from "react-router-dom";
 
-function CardDog({name, height, weight, image, id, addDogFavorite, favorite}) {
+function CardDog(propsDogs) {
+    const {name, height, weight, image, id, addDogFavorite, favorite, existUser} = propsDogs;
     const [favoriteState, setFavoriteState] = useState(favorite);
 
     const handleClickFavorite = () => {
-        setFavoriteState(state => !state);
-        addDogFavorite(id,favoriteState);
+        if(existUser){
+            const {addDogFavorite:m, ...dogData} = propsDogs;
+            setFavoriteState(state => !state);
+            addDogFavorite({
+                id,
+                favorite: favoriteState,
+                dogData
+            });
+            return;
+        }
+        console.log('Debes iniciar sesión');
     };
 
     return (
