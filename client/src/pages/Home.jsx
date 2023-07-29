@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import GroupPageDefault from '../components/GroupPageDefault'
 import BannerHomePage from '../components/BannerHomePage';
@@ -7,8 +7,8 @@ import SearchBarHome from '../components/SearchBarHome';
 import PaginatorDogsHome from '../components/PaginatorDogsHome';
 
 import ListDogs from '../components/ListDogs';
-import { useContext, useEffect } from 'react';
-import { setDogsContext, homeContext, setLoading } from '../context/HomeDogsContext';
+import { useEffect } from 'react';
+import { setDogsContext, setLoading, useHomeContext } from '../context/HomeDogsContext';
 import FilterDogsHome from '../components/FilterHomeDogs';
 import { Title } from 'react-head';
 import { useAuthFirebase } from '../context/AuthProvider';
@@ -17,7 +17,7 @@ import { useAuthFirebase } from '../context/AuthProvider';
 function Home() {
     //* Get dogs from Global Store
     const usuario = useAuthFirebase();
-    const [,dispatchHome] = useContext(homeContext);
+    const [,dispatchHome] = useHomeContext();
     const {all_dogs, favorite_dogs} = useSelector(({all_dogs, favorite_dogs}) => ({all_dogs, favorite_dogs}));
 
     //* Set dogs in local Component state

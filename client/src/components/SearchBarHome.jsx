@@ -1,11 +1,10 @@
 import { styled } from "styled-components";
 import Button from "../base_components/Button";
 import getDogsByName from "../controllers/getDogsByName";
-import { useContext } from "react";
-import { changeCurrentPage, homeContext, setDogsContext, setLoading } from "../context/HomeDogsContext";
+import { changeCurrentPage, setDogsContext, setLoading, useHomeContext } from "../context/HomeDogsContext";
 
 function SearchBarHome({ dogsRedux }) {
-    const [,dispatchContextHome] = useContext(homeContext);
+    const [,dispatchContextHome] = useHomeContext();
 
     const handleSubmit = evt => {
         evt.preventDefault();

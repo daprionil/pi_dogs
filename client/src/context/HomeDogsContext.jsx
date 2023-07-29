@@ -1,10 +1,13 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import { parseDogsPaginator, filteredDogsByAttributes } from "../utils";
 import { useAuthFirebase } from "./AuthProvider";
 import { getDogsFavorite } from "../redux/createActions";
 import { useDispatch } from "react-redux";
 
 const homeContext = createContext();
+const useHomeContext = () => {
+    return useContext(homeContext);
+};
 
 //* Type Actions
 const CHANGE_CURRENT_PAGE = "CHANGE_CURRENT_PAGE";
@@ -122,5 +125,6 @@ export {
     changeCurrentPage,
     setDogsContext,
     setLoading,
-    filterDogsContext
+    filterDogsContext,
+    useHomeContext
 };

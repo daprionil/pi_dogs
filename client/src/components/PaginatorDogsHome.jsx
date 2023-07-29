@@ -1,10 +1,10 @@
 import { css, styled } from "styled-components";
 import Button from "../base_components/Button";
-import { useContext, useEffect, useState } from "react";
-import { changeCurrentPage, homeContext } from "../context/HomeDogsContext";
+import { useEffect, useState } from "react";
+import { changeCurrentPage, useHomeContext } from "../context/HomeDogsContext";
 
 function PaginatorDogsHome() {
-    const [dataContextHome, dispatchHome] = useContext(homeContext);
+    const [dataContextHome, dispatchHome] = useHomeContext();
     const numberPages = dataContextHome.filtered_dogs_context.length;
     const currentPage = Number(dataContextHome.page_current);
 

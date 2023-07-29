@@ -1,8 +1,7 @@
 import { styled } from "styled-components";
 import CardDog from "./CardDog";
 import SectionDefaultNullish from "./SectionDefaultNullish";
-import { useContext } from "react";
-import { homeContext } from "../context/HomeDogsContext";
+import { useHomeContext } from "../context/HomeDogsContext";
 import Loader from '../base_components/Loader';
 import { useDispatch } from "react-redux";
 
@@ -12,7 +11,7 @@ import { useAuthFirebase } from "../context/AuthProvider";
 function ListDogs() {
     const dispathRedux = useDispatch();
     const usuario = useAuthFirebase();
-    const [dataContextHome] = useContext(homeContext);
+    const [dataContextHome] = useHomeContext();
     const dogs = [...dataContextHome.filtered_dogs_context[dataContextHome.page_current ?? 0] || []]
 
     const addToFavoriteDog = ({id, dogData, favorite}) => {

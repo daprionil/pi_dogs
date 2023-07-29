@@ -3,15 +3,14 @@ import Form from '../base_components/Form';
 import styled from "styled-components";
 import Select from "../base_components/Select";
 import Button from "../base_components/Button";
-import FilterSvg from "../base_components/FilterSvg";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { homeContext, filterDogsContext, changeCurrentPage } from "../context/HomeDogsContext";
+import { filterDogsContext, changeCurrentPage, useHomeContext } from "../context/HomeDogsContext";
 
 function FilterDogsHome() {
     const Temperaments = useSelector(({all_temperaments}) => all_temperaments);
-    const [,dispatchContextHome] = useContext(homeContext);
+    const [,dispatchContextHome] = useHomeContext();
     const [valuesForm, changeValuesForm] = useState({min:0, max:0,temperament:'', database: false, order:false});
 
     const handleChange = ({target:{type,name, value,checked}}) => {
