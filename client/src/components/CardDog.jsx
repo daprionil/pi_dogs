@@ -8,6 +8,7 @@ function CardDog(propsDogs) {
 
     const handleClickFavorite = () => {
         if(existUser){
+            // eslint-disable-next-line no-unused-vars
             const {addDogFavorite:m, ...dogData} = propsDogs;
             setFavoriteState(state => !state);
             addDogFavorite({

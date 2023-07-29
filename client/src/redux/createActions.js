@@ -7,6 +7,7 @@ import {
 } from './actionTypes';
 import addFavoriteDogFirebase from '../controllers/addFavoriteDogFirebase';
 import getFavoriteDogs from '../controllers/getFavoriteDogs';
+import deleteFavoriteDogFirebase from '../controllers/deleteFavoriteDogFirebase';
 
 //getAllTemperaments
 
@@ -46,10 +47,16 @@ const getDogsFavorite = ({uid}) => {
     }
 };
 
-const deleteDogFavorite = (id) => ({
-    type: SET_DOG_FAVORITE,
-    payload:id 
-});
+const deleteDogFavorite = ({uid, nameDog}) => {
+    return async function(dispatch){
+        deleteFavoriteDogFirebase({nameDog, uid}).then((favorite_dogs) => {
+            dispatch({
+                type: SET_DOG_FAVORITE,
+                payload: favorite_dogs
+            })
+        });
+    }
+};
 
 export {
     getDogs,

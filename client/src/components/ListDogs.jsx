@@ -16,7 +16,7 @@ function ListDogs() {
 
     const addToFavoriteDog = ({id, dogData, favorite}) => {
         if(favorite){
-            dispathRedux(deleteDogFavorite(id));
+            dispathRedux(deleteDogFavorite({nameDog: dogData.name, uid: usuario.uid}));
             return;
         }
         dispathRedux(addDogFavorite({id, uid: usuario.uid, dogData}));
