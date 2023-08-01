@@ -1,7 +1,17 @@
 import { styled } from "styled-components";
 import SectionDefaultNullish from "./SectionDefaultNullish";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import ButtonAddDogFavorite from "./ButtonAddDogFavorite";
 
-function CardDogDetail({image, name, id, height, weight, yearsOld, Temperaments}) {
+function CardDogDetail(propsDog) {
+    const {image, name, id, height, weight, yearsOld, Temperaments} = propsDog;
+    const favorite = useSelector(({favorite_dogs}) => {
+        const favoriteList = favorite_dogs ?? [];
+        return favoriteList.some(idFav => idFav === id);
+    });
+    const [favoriteState, setFavoriteState] = useState(favorite);
+
     return (
         <CardDogsStyled>
             <div className="section_image">
@@ -26,9 +36,10 @@ function CardDogDetail({image, name, id, height, weight, yearsOld, Temperaments}
                     }
                 </div>
             </div>
+            <ButtonAddDogFavorite propsDog={propsDog} favorite={favoriteState} setFavorite={setFavoriteState}/>
         </CardDogsStyled>
     );
-};
+}
 
 const CardDogsStyled = styled.div`
     @media (max-width:900px){
@@ -40,6 +51,7 @@ const CardDogsStyled = styled.div`
     min-height: 500px;
 
     margin: 0 10px;
+    position: relative;
 
     display: grid;
     grid-template-columns: 1fr 1fr;

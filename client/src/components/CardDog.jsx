@@ -1,72 +1,11 @@
 import { useState } from "react";
 import { styled } from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-
-import Button from "../base_components/Button";
-
-const MySwal = withReactContent(Swal);
+import { Link } from "react-router-dom";
+import ButtonAddDogFavorite from "./ButtonAddDogFavorite";
 
 function CardDog(propsDogs) {
-    const { name, height, weight, image, id, addDogFavorite, favorite, existUser } = propsDogs;
+    const { name, height, weight, image, id, favorite } = propsDogs;
     const [favoriteState, setFavoriteState] = useState(favorite);
-    const navigate = useNavigate();
-
-    const handleClickFavorite = async () => {
-        if (existUser) {
-            //?  This alert answer and to display if the user want delete of the favorite list
-            if (favoriteState) {
-                const { isDenied, isDismissed } = await MySwal.fire({
-                    title: <p>Eliminar</p>,
-                    html:<>
-                        <p>¿Estás seguro que deseas eliminarlo de tus favoritos?</p>
-                        <br />
-                        <Button onClick={() => Swal.clickConfirm()} bgcolor="red" color="white">Eliminar</Button>
-                    </>,
-                    icon: 'question',
-                    showConfirmButton: false
-                });
-                if(isDismissed || isDenied) return;
-            }
-
-            //? If the user want add raza to favorite list
-            // eslint-disable-next-line no-unused-vars
-            const { addDogFavorite: m, ...dogData } = propsDogs;
-            setFavoriteState(state => !state);
-            addDogFavorite({
-                id,
-                favorite: favoriteState,
-                dogData
-            });
-
-            if(!favoriteState){
-                MySwal.fire({
-                    title: <p>Exitoso</p>,
-                    text: `${name} ha sido agregado correctamente a tus Favoritos`,
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar',
-                    confirmButtonColor:'green'
-                });
-            }
-
-            return;
-        }
-
-        //! If the client no have active sesion
-        MySwal.fire({
-            title: <p>Advertencia</p>,
-            html: <>
-                <p>Si quieres agregar a {name} a tus Favoritos, debes de iniciar sesión</p>
-                <Button onClick={() => {
-                    navigate('/log-in');
-                    Swal.close();
-                }} bgcolor="red" color="white">Iniciar Sesion</Button>
-            </>,
-            icon: 'warning',
-            showConfirmButton:false
-        })
-    };
 
     return (
         <CardDogStyled>
@@ -80,11 +19,11 @@ function CardDog(propsDogs) {
                 <p><span>Altura <em>(Aprox)</em>: </span>{height === 'NaN' ? 'no disponible' : `${height}${!isNaN(height) ? ' cm' : ''}`}</p>
                 <p><span>Peso <em>(Aprox)</em>: </span>{weight === 'NaN' ? 'no disponible' : `${weight}${!isNaN(weight) ? ' lb' : ''}`}</p>
             </div>
-            <div
-                className="favorite_emoji"
-                dangerouslySetInnerHTML={{ __html: favoriteState ? '&#128159;' : '&#128420;' }}
-                onClick={handleClickFavorite}
-            ></div>
+            <ButtonAddDogFavorite
+                favorite={favoriteState}
+                setFavorite={setFavoriteState}
+                propsDog={propsDogs}
+            />
         </CardDogStyled>
     );
 }
@@ -158,19 +97,6 @@ const CardDogStyled = styled.div`
         & .name_title{
             font-size: 1.7rem;
             font-weight: 900;
-        }
-    }
-
-    & .favorite_emoji{
-        position: absolute;
-        cursor: pointer;
-        top: 10px;
-        right: 10px;
-        font-size: 1.7rem;
-        filter: drop-shadow(0 2px 2px black);
-        transition: all .2s ease;
-        &:hover{
-            transform: scale(1.1);
         }
     }
 `
