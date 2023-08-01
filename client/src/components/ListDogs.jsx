@@ -3,25 +3,10 @@ import CardDog from "./CardDog";
 import SectionDefaultNullish from "./SectionDefaultNullish";
 import { useHomeContext } from "../context/HomeDogsContext";
 import Loader from '../base_components/Loader';
-import { useDispatch } from "react-redux";
-
-import { addDogFavorite, deleteDogFavorite } from "../redux/createActions";
-import { useAuthFirebase } from "../context/AuthProvider";
 
 function ListDogs() {
-    const dispathRedux = useDispatch();
-    const usuario = useAuthFirebase();
     const [dataContextHome] = useHomeContext();
     const dogs = [...dataContextHome.filtered_dogs_context[dataContextHome.page_current ?? 0] || []]
-
-    //? This function is executed by each card for DogFavorite
-    const addToFavoriteDog = ({id, dogData, favorite}) => {
-        if(favorite){
-            dispathRedux(deleteDogFavorite({nameDog: dogData.name, uid: usuario.uid}));
-            return;
-        }
-        dispathRedux(addDogFavorite({id, uid: usuario.uid, dogData}));
-    };
 
     return (
         <ListDogsStyled>
@@ -33,7 +18,7 @@ function ListDogs() {
                     dogs.length ? //If exist dogs for display
                         
                         dogs.map((dog,i) => {
-                            return <CardDog {...dog} existUser={!!usuario} addDogFavorite={addToFavoriteDog} key={i}/>
+                            return <CardDog {...dog} key={i}/>
                         })
 
                     : <SectionDefaultNullish
