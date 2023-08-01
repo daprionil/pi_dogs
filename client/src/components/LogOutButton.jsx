@@ -3,9 +3,16 @@ import { signOut } from 'firebase/auth';
 
 import { auth } from '../firebase/firebaseConfig';
 import Button from "../base_components/Button"
+import { useAuthFirebase } from '../context/AuthProvider';
 const LogOutButton = () => {
+    const usuario = useAuthFirebase();
+
     const handleClickLogOut = () => {
-        signOut(auth);
+        signOut(auth).then(() => {
+            if(usuario){
+                window.location.reload();
+            }
+        });
     };
 
     return (

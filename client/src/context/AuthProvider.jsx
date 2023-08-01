@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useState } from "react"
 import { auth } from '../firebase/firebaseConfig';
 import Loader from "../base_components/Loader";
 import styled from "styled-components";
+import { getDogsFavorite } from "../redux/createActions";
+import { useDispatch } from "react-redux";
 
 const authUserContext = createContext();
 
@@ -11,6 +13,7 @@ export const useAuthFirebase = () => {
 };
 
 const AuthProvider = ({ children }) => {
+    const dispatchRedux = useDispatch();
     const [ usuario, setUsuario ] = useState(null);
     const [ loading, setLoading ] = useState(false);
 
@@ -19,6 +22,10 @@ const AuthProvider = ({ children }) => {
         auth.onAuthStateChanged(user => {
             setLoading(false);
             setUsuario(user);
+            
+            if(user){
+                dispatchRedux(getDogsFavorite({uid:user.uid}));
+            }
         });
     },[]);
 

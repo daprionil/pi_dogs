@@ -106,12 +106,6 @@ function HomeDogsContext({children}) {
         window.history.pushState({},'',`?page=${data.page_current}`);
     },[data.page_current]);
 
-    useEffect(() => {
-        if(usuario){
-            dispatchRedux(getDogsFavorite({uid:usuario.uid}));
-        }
-    },[]);
-
     return (
         <homeContext.Provider value={[data, dispatch]}>
             {children}

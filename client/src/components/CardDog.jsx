@@ -1,25 +1,11 @@
 import { useState } from "react";
 import { styled } from "styled-components";
 import { Link } from "react-router-dom";
+import ButtonAddDogFavorite from "./ButtonAddDogFavorite";
 
 function CardDog(propsDogs) {
-    const {name, height, weight, image, id, addDogFavorite, favorite, existUser} = propsDogs;
+    const { name, height, weight, image, id, favorite } = propsDogs;
     const [favoriteState, setFavoriteState] = useState(favorite);
-
-    const handleClickFavorite = () => {
-        if(existUser){
-            // eslint-disable-next-line no-unused-vars
-            const {addDogFavorite:m, ...dogData} = propsDogs;
-            setFavoriteState(state => !state);
-            addDogFavorite({
-                id,
-                favorite: favoriteState,
-                dogData
-            });
-            return;
-        }
-        console.log('Debes iniciar sesión');
-    };
 
     return (
         <CardDogStyled>
@@ -30,14 +16,14 @@ function CardDog(propsDogs) {
             </Link>
             <div className="info_dog">
                 <h3 className="name_title">{name}</h3>
-                <p><span>Altura <em>(Aprox)</em>: </span>{height === 'NaN' ? 'no disponible':`${height}${!isNaN(height) ? ' cm' : ''}`}</p>
-                <p><span>Peso <em>(Aprox)</em>: </span>{weight === 'NaN' ? 'no disponible':`${weight}${!isNaN(weight) ? ' lb' : ''}`}</p>
+                <p><span>Altura <em>(Aprox)</em>: </span>{height === 'NaN' ? 'no disponible' : `${height}${!isNaN(height) ? ' cm' : ''}`}</p>
+                <p><span>Peso <em>(Aprox)</em>: </span>{weight === 'NaN' ? 'no disponible' : `${weight}${!isNaN(weight) ? ' lb' : ''}`}</p>
             </div>
-            <div
-                className="favorite_emoji"
-                dangerouslySetInnerHTML={{__html:favoriteState ? '&#128159;':'&#128420;'}}
-                onClick={handleClickFavorite}
-            ></div>
+            <ButtonAddDogFavorite
+                favorite={favoriteState}
+                setFavorite={setFavoriteState}
+                propsDog={propsDogs}
+            />
         </CardDogStyled>
     );
 }
@@ -111,19 +97,6 @@ const CardDogStyled = styled.div`
         & .name_title{
             font-size: 1.7rem;
             font-weight: 900;
-        }
-    }
-
-    & .favorite_emoji{
-        position: absolute;
-        cursor: pointer;
-        top: 10px;
-        right: 10px;
-        font-size: 1.7rem;
-        filter: drop-shadow(0 2px 2px black);
-        transition: all .2s ease;
-        &:hover{
-            transform: scale(1.1);
         }
     }
 `
