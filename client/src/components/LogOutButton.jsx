@@ -4,7 +4,9 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../firebase/firebaseConfig';
 import Button from "../base_components/Button"
 import { useAuthFirebase } from '../context/AuthProvider';
-const LogOutButton = () => {
+
+// eslint-disable-next-line react/prop-types
+const LogOutButton = ({text = null}) => {
     const usuario = useAuthFirebase();
 
     const handleClickLogOut = () => {
@@ -19,9 +21,16 @@ const LogOutButton = () => {
         <Button
             bgcolor="red"
             color="white"
-            style={{ padding: ".5em .9em" }}
+            style={{ padding: ".5em .9em", whiteSpace:"nowrap", flexWrap: "nowrap", display:"flex", alignItems:"center", justifyContent:"space-between"}}
             onClick={handleClickLogOut}
-        ><IoMdLogOut /></Button>
+        >{
+            text ?
+                <>
+                    <IoMdLogOut />
+                    <p>Cerrar Sesión</p>
+                </>
+            :   <IoMdLogOut />
+        }</Button>
     )
 }
 

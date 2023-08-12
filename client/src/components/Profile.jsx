@@ -1,21 +1,32 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { BiSolidUserCircle } from 'react-icons/bi';
 
 import { useAuthFirebase } from "../context/AuthProvider"
+import LogOutButton from './LogOutButton';
+import { useState } from 'react';
+import Button from '../base_components/Button';
+import { NavLink } from 'react-router-dom';
 
 const Profile = () => {
     const usuario = useAuthFirebase();
+    const [ isOpen, setIsOpen ] = useState(true);
+
+    const handlePopUp = () => setIsOpen(state => !state);
 
     if(usuario){
         return (
             <>
-                <ContainerProfile>
+                <ContainerProfile onClick={handlePopUp}>
                     {
                         usuario.photoURL ?
                             <ImageProfile src={usuario.photoURL} alt={`${usuario.email} profile Dogest`} />
                         :   <IconProfile />
                     }
                 </ContainerProfile>
+                <PopUpProfile $isOpen={isOpen}>
+                    <Button bgcolor="transparent" as={NavLink}>Mi Perfil</Button>
+                    <LogOutButton text/>
+                </PopUpProfile>
             </>
         )
     }
@@ -42,6 +53,38 @@ const ImageProfile = styled.img`
 
 const IconProfile = styled(BiSolidUserCircle)`
     font-size: 2.7rem;
+`;
+
+const PopUpProfile = styled.div`
+    position: fixed;
+    padding: .5em;
+    right: 4vw;
+    overflow: hidden;
+    
+    ${({$isOpen}) => (
+        /* Set funcionality in PopUp */
+        $isOpen ?
+            css`
+                height: 0px;
+                padding: 0;
+            `
+        : css`
+                height: inherit;
+                padding: .5em;
+            `
+    )};
+    
+    width: 150px;
+
+    display: flex;
+    flex-direction: column;
+    align-items:stretch;
+    gap: 5px;
+
+    transition: all .3s ease;
+
+    background: #eaeaea;
+    box-shadow: 0 1px 15px rgba(0,0,0,.3);
 `;
 
 export default Profile
