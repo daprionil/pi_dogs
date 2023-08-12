@@ -59,7 +59,7 @@ const IconProfile = styled(BiSolidUserCircle)`
 const PopUpProfile = styled.div`
     position: fixed;
     padding: .5em;
-    right: 4vw;
+    right: 20px;
     overflow: hidden;
     
     ${({ $isOpen }) => (
