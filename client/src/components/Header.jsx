@@ -31,11 +31,8 @@ function Header() {
                                 <li className='item_menu create_dog'>
                                     <NavLink to="/createdog">Crear Tu Dog</NavLink>
                                 </li>
-                                <li>
+                                <li className='item_menu'>
                                     <Profile />
-                                </li>
-                                <li>
-                                    <LogOutButton />
                                 </li>
                             </>
                         :   <>

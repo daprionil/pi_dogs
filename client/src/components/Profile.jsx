@@ -8,13 +8,15 @@ const Profile = () => {
 
     if(usuario){
         return (
-            <ContainerProfile>
-                {
-                    usuario.photoURL ?
-                        <ImageProfile src={usuario.photoURL} alt={`${usuario.email} profile Dogest`} />
-                    :   <IconProfile />
-                }
-            </ContainerProfile>
+            <>
+                <ContainerProfile>
+                    {
+                        usuario.photoURL ?
+                            <ImageProfile src={usuario.photoURL} alt={`${usuario.email} profile Dogest`} />
+                        :   <IconProfile />
+                    }
+                </ContainerProfile>
+            </>
         )
     }
     return null;
