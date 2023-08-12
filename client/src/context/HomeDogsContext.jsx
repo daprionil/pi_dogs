@@ -1,8 +1,5 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { parseDogsPaginator, filteredDogsByAttributes } from "../utils";
-import { useAuthFirebase } from "./AuthProvider";
-import { getDogsFavorite } from "../redux/createActions";
-import { useDispatch } from "react-redux";
 
 const homeContext = createContext();
 const useHomeContext = () => {
@@ -43,11 +40,6 @@ const filterDogsContext = ({min,max, temperament,database,order}) => {
         payload: {min,max,temperament,database,order}
     };
 };
-
-/**
- * dogs_filtered
- * page_current
- */
 
 //? Generate context
 const reducerContext = function(state, {type,payload}){
@@ -94,9 +86,8 @@ const initialState = {
 };
 
 function HomeDogsContext({children}) {
-    const usuario = useAuthFirebase();
-    const dispatchRedux = useDispatch();
     const [data, dispatch] = useReducer(reducerContext, initialState);
+
     useEffect(() => {
         if(data.page_current === null){
             const backCurrentPage = new URLSearchParams(window.location.search).get('page') || 0;
