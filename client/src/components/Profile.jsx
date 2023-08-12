@@ -1,25 +1,37 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { BiSolidUserCircle } from 'react-icons/bi';
 
 import { useAuthFirebase } from "../context/AuthProvider"
+import LogOutButton from './LogOutButton';
+import { useState } from 'react';
+import Button from '../base_components/Button';
+import { NavLink } from 'react-router-dom';
 
 const Profile = () => {
     const usuario = useAuthFirebase();
+    const [isOpen, setIsOpen] = useState(true);
 
-    if(usuario){
-        return (
+    const handlePopUp = () => setIsOpen(state => !state);
+
+    return (
+        usuario && (
             <>
-                <ContainerProfile>
+                <ContainerProfile onClick={handlePopUp}>
                     {
                         usuario.photoURL ?
                             <ImageProfile src={usuario.photoURL} alt={`${usuario.email} profile Dogest`} />
-                        :   <IconProfile />
+                            : <IconProfile />
                     }
                 </ContainerProfile>
+                <PopUpProfile $isOpen={isOpen}>
+                <Button bgcolor="transparent" as={NavLink} to='/'>Crear tu Dog</Button>
+                    <Button bgcolor="transparent" as={NavLink} to='/medogs'>Mis Favoritos</Button>
+                    <Button bgcolor="transparent" as={NavLink} to='/profile'>Mi Perfil</Button>
+                    <LogOutButton text />
+                </PopUpProfile>
             </>
         )
-    }
-    return null;
+    );
 };
 
 
@@ -42,6 +54,38 @@ const ImageProfile = styled.img`
 
 const IconProfile = styled(BiSolidUserCircle)`
     font-size: 2.7rem;
+`;
+
+const PopUpProfile = styled.div`
+    position: fixed;
+    padding: .5em;
+    right: 4vw;
+    overflow: hidden;
+    
+    ${({ $isOpen }) => (
+        /* Set funcionality in PopUp */
+        $isOpen ?
+            css`
+                height: 0px;
+                padding: 0;
+            `
+            : css`
+                height: inherit;
+                padding: .5em;
+            `
+    )};
+    
+    width: 180px;
+
+    display: flex;
+    flex-direction: column;
+    align-items:stretch;
+    gap: 5px;
+
+    transition: all .3s ease;
+
+    background: #eaeaea;
+    box-shadow: 0 1px 15px rgba(0,0,0,.3);
 `;
 
 export default Profile
