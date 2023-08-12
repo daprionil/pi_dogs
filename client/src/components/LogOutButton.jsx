@@ -21,12 +21,14 @@ const LogOutButton = ({text = null}) => {
         <Button
             bgcolor="red"
             color="white"
-            style={{ padding: ".5em .9em", whiteSpace:"nowrap", flexWrap: "nowrap", display:"flex", alignItems:"center", justifyContent:"space-between"}}
+            style={{ padding: ".5em .9em", whiteSpace:"nowrap", flexWrap: "nowrap", display:"flex", alignItems:"center", justifyContent:"space-around", gap:'5px'}}
             onClick={handleClickLogOut}
         >{
             text ?
                 <>
-                    <IoMdLogOut />
+                    <div style={{minWidth:'1rem', display:'flex'}}>
+                        <IoMdLogOut />
+                    </div>
                     <p>Cerrar Sesión</p>
                 </>
             :   <IoMdLogOut />

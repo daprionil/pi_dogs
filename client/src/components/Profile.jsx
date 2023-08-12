@@ -9,28 +9,29 @@ import { NavLink } from 'react-router-dom';
 
 const Profile = () => {
     const usuario = useAuthFirebase();
-    const [ isOpen, setIsOpen ] = useState(true);
+    const [isOpen, setIsOpen] = useState(true);
 
     const handlePopUp = () => setIsOpen(state => !state);
 
-    if(usuario){
-        return (
+    return (
+        usuario && (
             <>
                 <ContainerProfile onClick={handlePopUp}>
                     {
                         usuario.photoURL ?
                             <ImageProfile src={usuario.photoURL} alt={`${usuario.email} profile Dogest`} />
-                        :   <IconProfile />
+                            : <IconProfile />
                     }
                 </ContainerProfile>
                 <PopUpProfile $isOpen={isOpen}>
-                    <Button bgcolor="transparent" as={NavLink}>Mi Perfil</Button>
-                    <LogOutButton text/>
+                <Button bgcolor="transparent" as={NavLink} to='/'>Crear tu Dog</Button>
+                    <Button bgcolor="transparent" as={NavLink} to='/medogs'>Mis Favoritos</Button>
+                    <Button bgcolor="transparent" as={NavLink} to='/profile'>Mi Perfil</Button>
+                    <LogOutButton text />
                 </PopUpProfile>
             </>
         )
-    }
-    return null;
+    );
 };
 
 
@@ -61,20 +62,20 @@ const PopUpProfile = styled.div`
     right: 4vw;
     overflow: hidden;
     
-    ${({$isOpen}) => (
+    ${({ $isOpen }) => (
         /* Set funcionality in PopUp */
         $isOpen ?
             css`
                 height: 0px;
                 padding: 0;
             `
-        : css`
+            : css`
                 height: inherit;
                 padding: .5em;
             `
     )};
     
-    width: 150px;
+    width: 180px;
 
     display: flex;
     flex-direction: column;
