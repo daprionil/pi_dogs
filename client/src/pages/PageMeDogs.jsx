@@ -37,7 +37,7 @@ function PageMeDogs() {
                 <h1>Mi Lista de Favoritos</h1>
                 <article>
                     {
-                        dogsFavorites.length && dogsFavorites.map(dog => (
+                        dogsFavorites && dogsFavorites.map(dog => (
                             <CardDog
                                 existUser={!!usuario}
                                 addDogFavorite={addToFavoriteDog}
