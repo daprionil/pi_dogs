@@ -11,8 +11,10 @@ import { useState } from "react";
 const ProfilePage = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const usuario = useAuthFirebase();
-    const favoriteCount = useSelector(({favorite_dogs}) => favorite_dogs.length);
-
+    const [favoriteCount, lastDog] = useSelector(({favorite_dogs,all_dogs}) => [
+        favorite_dogs?.length ?? 0,
+        favorite_dogs ? all_dogs.find(({id}) => id === favorite_dogs[0]) ?? {} : {}
+    ]);
 
     return (
         <GroupPageDefault>
@@ -39,6 +41,10 @@ const ProfilePage = () => {
                                     <ContainerMinInfo>
                                         <p>Tus Favoritos</p>
                                         <p>{favoriteCount}</p>
+                                    </ContainerMinInfo>
+                                    <ContainerMinInfo>
+                                        <p>Último Agregado</p>
+                                        <p>{lastDog ? lastDog.name : '??'}</p>
                                     </ContainerMinInfo>
                                 </ListMinInfoContainer>
                             </>
@@ -72,8 +78,8 @@ const ContainerListInfo = styled.div`
     flex-direction: column;
     align-items: center;
     
-    gap: 10px;
-    padding: 10px 0;
+    gap: 1.3rem;
+    padding: 30px 10px;
     & p span:nth-child(1){
         font-weight: 700;
     }
@@ -89,8 +95,7 @@ const ContainerMinInfo = styled.div`
     border-radius: 10px;
     padding: 10px;
     text-align: center;
-    
-    background: #f0f0f0;
+
     font-weight: 600;
 
     display: flex;
@@ -99,6 +104,10 @@ const ContainerMinInfo = styled.div`
     & p:nth-child(1){
         filter: drop-shadow(0px 1px 15px rgba(0,0,0,.3));
         font-weight: 600;
+    }
+    & p:nth-child(2){
+        background: #f0f0f0;
+        box-shadow: 0px 1px 15px rgba(0,0,0,.1);
     }
 `;
 

@@ -5,16 +5,15 @@ import GroupPageDefault from "../components/GroupPageDefault";
 import CardDog from "../components/CardDog";
 import { styled } from "styled-components";
 import { addDogFavorite, deleteDogFavorite } from "../redux/createActions";
-import { Title } from 'react-head';
-import { useEffect } from 'react';
+import { Title } from 'react-head'
 
 import { useAuthFirebase } from '../context/AuthProvider';
-import { getDogsFavorite } from '../redux/createActions';
 
 function PageMeDogs() {
     const usuario = useAuthFirebase();
     const dispatchRedux = useDispatch();
     const dogsFavorites = useSelector(({all_dogs}) => all_dogs.filter(({favorite}) => favorite));
+    
     
     //? This function is executed by each card for DogFavorite
     const addToFavoriteDog = ({id, dogData, favorite}) => {
