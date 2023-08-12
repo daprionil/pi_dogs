@@ -10,11 +10,11 @@ const rootReducer = function(state = initialState, {type, payload}){
     const typeAction = ({
         [`${ADD_DOGS}`]: () => {
             const favoritesState = state.favorite_dogs ?? [];
-            const favorites = favoritesState.map(({id}) => id);
+            const favorites = favoritesState.map((id) => id);
             const newDogsWithFavorites = new Set([...payload.map(dog => (
                 {...dog, favorite: favorites.includes(dog.id)}
             ))]);
-            
+
             return {
                 ...state,
                 all_dogs: [...newDogsWithFavorites]

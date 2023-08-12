@@ -7,14 +7,15 @@ function PrivateAuthRoute({ children, loged }) {
     
     return (
         /* If the route requires the user is not logged in */
-        loged ?
-            usuario ?
-                (<Navigate to='/home' replace />)
-            : children
-        /* If the route requires the user to be logged */
-        : usuario ?
-            children
-        : (<Navigate to="/log-in" replace />)
+        usuario !== null && (
+            loged ?
+                usuario ?
+                    (<Navigate to='/home' replace />)
+                    : children
+            /* If the route requires the user to be logged */
+            : usuario ?
+                children
+                : (<Navigate to="/log-in" replace />))
     );
 }
 

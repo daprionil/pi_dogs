@@ -15,7 +15,6 @@ function PageMeDogs() {
     const usuario = useAuthFirebase();
     const dispatchRedux = useDispatch();
     const dogsFavorites = useSelector(({all_dogs}) => all_dogs.filter(({favorite}) => favorite));
-    const { uid } = useAuthFirebase();
     
     //? This function is executed by each card for DogFavorite
     const addToFavoriteDog = ({id, dogData, favorite}) => {
@@ -25,10 +24,6 @@ function PageMeDogs() {
         }
         dispatchRedux(addDogFavorite({id, uid: usuario.uid, dogData}));
     };
-
-    useEffect(() => {
-        dispatchRedux(getDogsFavorite({uid}));
-    },[]);
 
     return (
         <GroupPageDefault>
