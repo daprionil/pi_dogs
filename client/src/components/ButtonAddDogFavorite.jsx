@@ -1,12 +1,12 @@
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 import Button from "../base_components/Button";
 import { useAuthFirebase } from "../context/AuthProvider";
 import { addDogFavorite, deleteDogFavorite } from "../redux/createActions";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 
 const MySwal = withReactContent(Swal);
 

@@ -1,13 +1,20 @@
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import { Title } from "react-head";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import GroupPageDefault from "../components/GroupPageDefault";
 import Form from "../base_components/Form";
 import { useAuthFirebase } from "../context/AuthProvider";
 import IconProfile from "../base_components/IconProfile";
-import { useSelector } from "react-redux";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import Button from "../base_components/Button";
+import Input from "../base_components/Input";
+import InputFile from "../base_components/InputFile";
+
+const MySwal = withReactContent(Swal);
 
 const ProfilePage = () => {
     const [isEditMode, setIsEditMode] = useState(false);
@@ -17,6 +24,20 @@ const ProfilePage = () => {
         favorite_dogs ? all_dogs.find(({id}) => id === favorite_dogs[0]) ?? {} : {}
     ]);
     
+    const handleAlertToChangeImage = () => {
+        MySwal.fire({
+            title: <p>Cambiar Imágen de Perfil</p>,
+            icon: 'question',
+            html: <>
+                    <p>¿Te gustaría cambiar tu Imagen de Perfil?</p>
+                    <br />
+                    <Button bgcolor="red" color="white" onClick={Swal.close}>Cerrar</Button>
+                    <InputFile />
+                </>,
+            showConfirmButton:false,
+        })
+    }
+
     return (
         <GroupPageDefault>
             <Title>Mi Perfil</Title>
@@ -26,7 +47,7 @@ const ProfilePage = () => {
                         isEditMode ?
                             <p>editando...</p>
                         :   <>
-                                <ContainerImageProfile>
+                                <ContainerImageProfile onClick={handleAlertToChangeImage}>
                                     {
                                         usuario.photoURL ?
                                             <img src={usuario.photoURL} alt="" />
