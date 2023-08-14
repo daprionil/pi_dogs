@@ -17,26 +17,39 @@ import InputFile from "../base_components/InputFile";
 const MySwal = withReactContent(Swal);
 
 const ProfilePage = () => {
-    const [isEditMode, setIsEditMode] = useState(false);
     const usuario = useAuthFirebase();
     const [favoriteCount, lastDog] = useSelector(({favorite_dogs,all_dogs}) => [
         favorite_dogs?.length ?? 0,
         favorite_dogs ? all_dogs.find(({id}) => id === favorite_dogs[0]) ?? {} : {}
     ]);
+    const [isEditMode, setIsEditMode] = useState(false);
     
-    const handleAlertToChangeImage = () => {
-        MySwal.fire({
+    const handleAlertToChangeImage = async () => {
+        const {isConfirmed} = await MySwal.fire({
             title: <p>Cambiar Imágen de Perfil</p>,
             icon: 'question',
             html: <>
                     <p>¿Te gustaría cambiar tu Imagen de Perfil?</p>
                     <br />
-                    <Button bgcolor="red" color="white" onClick={Swal.close}>Cerrar</Button>
                     <InputFile />
+                    <Button bgcolor="#008cff" color="white" onClick={Swal.clickConfirm}>Guardar</Button>
                 </>,
             showConfirmButton:false,
-        })
-    }
+        });
+
+        //? If the user was click in the save button
+        if(isConfirmed){
+            //! Validate if the image is valid to change and add Cloudinary
+            MySwal.fire({
+                title: 'Se ha cambiado de forma exitosa',
+                icon:"success",
+                html:<>
+                        <Button bgcolor="red" color="white" onClick={Swal.close}>Aceptar</Button>
+                    </>,
+                showConfirmButton:false
+            });
+        };
+    };
 
     return (
         <GroupPageDefault>
@@ -158,6 +171,7 @@ const ContainerMinInfo = styled.div`
         transform: scale(1);
         &:hover{
             transform: scale(1.03);
+            text-decoration: underline;
         }
     }
 `;
