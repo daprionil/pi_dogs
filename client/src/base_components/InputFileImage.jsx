@@ -1,41 +1,47 @@
-import { useState } from "react";
 import styled from "styled-components";
 
-function InputFile() {
-    const [image, setImage] = useState(null);
+function InputFileImage({setImageState}) {
 
     const handleChangeFile = ({ target }) => {
-        console.log(target);
-    }
+        setImageState(target.files[0]);
+    };
 
     return (
         <ContainerInputFile htmlFor="file_input_image">
-            <input type="file" onChange={handleChangeFile} id="file_input_image" />
+            <input
+                type="file"
+                onChange={handleChangeFile}
+                accept="image/jpg, image/jpeg, image/png"
+                id="file_input_image"
+            />
         </ContainerInputFile>
     );
-};
+}
 
 
 const ContainerInputFile = styled.label`
     position: relative;
     display: block;
-    width: fit-content;
+    
+    min-width: 290px;
+    max-width: 400px;
+    width: 100%;
+    
     margin: 5px auto;
-
     padding: 10px;
     border: 2px dashed #555;
-
     border-radius: 10px;
+    overflow-x: hidden;
+    background: #f0f0f0;
 
     &, *{
         cursor: pointer;
     }
 
     transition: all .3s ease-in-out;
-    transform: scale(1);
 
     &:hover{
-        transform: scale(1.02);
+        background: #dddddd;
     }
 
     & input[type="file"]{
@@ -70,4 +76,4 @@ const ContainerInputFile = styled.label`
     }
 `;
 
-export default InputFile;
+export default InputFileImage;

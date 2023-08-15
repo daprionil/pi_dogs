@@ -3,7 +3,7 @@ import withReactContent from "sweetalert2-react-content";
 import { Title } from "react-head";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import GroupPageDefault from "../components/GroupPageDefault";
@@ -11,8 +11,8 @@ import Form from "../base_components/Form";
 import { useAuthFirebase } from "../context/AuthProvider";
 import IconProfile from "../base_components/IconProfile";
 import Button from "../base_components/Button";
-import Input from "../base_components/Input";
-import InputFile from "../base_components/InputFile";
+import InputFileImage from "../base_components/InputFileImage";
+import uploadImageCloudServer from "../controllers/uploadImageCloudServer";
 
 const MySwal = withReactContent(Swal);
 
@@ -23,16 +23,44 @@ const ProfilePage = () => {
         favorite_dogs ? all_dogs.find(({id}) => id === favorite_dogs[0]) ?? {} : {}
     ]);
     const [isEditMode, setIsEditMode] = useState(false);
+    const imageProfile = useRef(null);
     
+    //================================================================
+
+
+    //! Change the image in reference
+    const changeImageProfile = (image) => imageProfile.current = image;
+    
+    //! Execute submit for up image to Cloud
+    const handleSubmitChangeImageProfile = async () => {
+        if(imageProfile.current){
+            //! This close window from SweetAlert2
+            uploadImageCloudServer(imageProfile.current).then(console.log);
+            Swal.close();
+            return;
+        }
+
+        //? Show Alert to Denied activity
+        MySwal.fire({
+            title:'Error',
+            icon:'error',
+            text: "No has agregado una imágen",
+            showConfirmButton:false
+        });
+    };
+
     const handleAlertToChangeImage = async () => {
         const {isConfirmed} = await MySwal.fire({
             title: <p>Cambiar Imágen de Perfil</p>,
-            icon: 'question',
             html: <>
                     <p>¿Te gustaría cambiar tu Imagen de Perfil?</p>
                     <br />
-                    <InputFile />
-                    <Button bgcolor="#008cff" color="white" onClick={Swal.clickConfirm}>Guardar</Button>
+                    <InputFileImage setImageState={changeImageProfile} />
+                    <Button
+                        bgcolor="#ff0000"
+                        color="white"
+                        onClick={handleSubmitChangeImageProfile}
+                    >Guardar</Button>
                 </>,
             showConfirmButton:false,
         });
@@ -40,6 +68,7 @@ const ProfilePage = () => {
         //? If the user was click in the save button
         if(isConfirmed){
             //! Validate if the image is valid to change and add Cloudinary
+            console.log(usuario);
             MySwal.fire({
                 title: 'Se ha cambiado de forma exitosa',
                 icon:"success",
@@ -48,7 +77,7 @@ const ProfilePage = () => {
                     </>,
                 showConfirmButton:false
             });
-        };
+        }
     };
 
     return (
@@ -144,6 +173,14 @@ const ListMinInfoContainer = styled.div`
     flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
+    
+    div{
+        border-right:2px solid #555;
+    }
+
+    & div:last-child{
+        border-right: none;
+    }
 `;
 const ContainerMinInfo = styled.div`
     text-align: center;
@@ -151,6 +188,8 @@ const ContainerMinInfo = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    
+    padding: 10px;
 
     & p:nth-child(1){
         filter: drop-shadow(0px 1px 15px rgba(0,0,0,.3));
