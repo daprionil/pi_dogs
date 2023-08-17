@@ -4,9 +4,10 @@ export default async function(imageBlob){
 
     const options = {
         method: 'POST',
-        data: formData
+        body: formData
     };
 
+    //? use /upload_images from server API to up image in cloudinary
     const response = await fetch(`${import.meta.env.VITE_URL_API}/upload_images`, options);
     const data = await response.json();
 
