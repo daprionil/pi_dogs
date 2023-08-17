@@ -9,6 +9,9 @@ const reactSwalErrorAlert = ({message}) => {
         title:'Error',
         icon:'error',
         text: message,
+        html:<>
+            <p>Eso</p>
+        </>,
         showConfirmButton:false
     });
 }

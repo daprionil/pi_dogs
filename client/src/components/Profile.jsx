@@ -45,6 +45,7 @@ const ContainerProfile = styled.div`
 `;
 
 const ImageProfile = styled.img`
+    width: 100%;
     max-width: 37px;
     aspect-ratio: 1;
     object-fit: cover;
