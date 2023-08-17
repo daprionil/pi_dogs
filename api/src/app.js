@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const multipart = require('connect-multiparty');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
@@ -16,6 +17,7 @@ server.name = 'API';
 //server.use(cors({origin:domainCORS}));
 server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 server.use(bodyParser.json({ limit: '50mb' }));
+server.use(multipart());
 server.use(cookieParser());
 server.use(morgan('dev'));
 server.use((req, res, next) => {

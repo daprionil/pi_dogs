@@ -4,8 +4,8 @@ import { NavLink } from 'react-router-dom';
 import DogestIcon from '../base_components/DogestIcon';
 import { useAuthFirebase } from '../context/AuthProvider';
 import LogInButton from './LogInButton';
-import LogOutButton from './LogOutButton';
 import SignInButton from './SignInButton';
+import Profile from './Profile';
 
 function Header() {
     const usuario = useAuthFirebase();
@@ -20,17 +20,12 @@ function Header() {
                     <li className='item_menu'>
                         <NavLink to="/home">Home</NavLink>
                     </li>
+                    {/*//? Intercepta el inicio de sesión para visualizar opciones en el Header*/}
                     {
                         usuario ?
                             <>
                                 <li className='item_menu'>
-                                    <NavLink to="/medogs">Mis Dogs</NavLink>
-                                </li>
-                                <li className='item_menu create_dog'>
-                                    <NavLink to="/createdog">Crear Tu Dog</NavLink>
-                                </li>
-                                <li>
-                                    <LogOutButton />
+                                    <Profile />
                                 </li>
                             </>
                         :   <>
