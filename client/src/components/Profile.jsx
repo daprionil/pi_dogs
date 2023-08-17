@@ -1,11 +1,11 @@
 import styled, { css } from 'styled-components';
-import { BiSolidUserCircle } from 'react-icons/bi';
 
 import { useAuthFirebase } from "../context/AuthProvider"
 import LogOutButton from './LogOutButton';
 import { useState } from 'react';
 import Button from '../base_components/Button';
 import { NavLink } from 'react-router-dom';
+import IconProfile from '../base_components/IconProfile';
 
 const Profile = () => {
     const usuario = useAuthFirebase();
@@ -20,11 +20,11 @@ const Profile = () => {
                     {
                         usuario.photoURL ?
                             <ImageProfile src={usuario.photoURL} alt={`${usuario.email} profile Dogest`} />
-                            : <IconProfile />
+                            : <IconProfile $size='md' />
                     }
                 </ContainerProfile>
                 <PopUpProfile $isOpen={isOpen}>
-                <Button bgcolor="transparent" as={NavLink} to='/'>Crear tu Dog</Button>
+                    <Button bgcolor="transparent" as={NavLink} to='/createdog'>Crear tu Dog</Button>
                     <Button bgcolor="transparent" as={NavLink} to='/medogs'>Mis Favoritos</Button>
                     <Button bgcolor="transparent" as={NavLink} to='/profile'>Mi Perfil</Button>
                     <LogOutButton text />
@@ -45,15 +45,12 @@ const ContainerProfile = styled.div`
 `;
 
 const ImageProfile = styled.img`
+    width: 100%;
     max-width: 37px;
     aspect-ratio: 1;
     object-fit: cover;
     box-shadow: 0 1px 10px rgba(0,0,0,0.4);
     border-radius: 50%;
-`;
-
-const IconProfile = styled(BiSolidUserCircle)`
-    font-size: 2.7rem;
 `;
 
 const PopUpProfile = styled.div`

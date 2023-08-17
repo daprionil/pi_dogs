@@ -19,6 +19,7 @@
 //     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
+const cloudinary = require('./src/cloudinary.js');
 
 const getAllApiTemperamentsController = require('./src/controllers/getAllApiTemperamentsController.js');
 const createBulkTemperamentsController = require('./src/controllers/createBulkTemperamentsController.js');

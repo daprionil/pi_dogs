@@ -21,11 +21,11 @@ const AuthProvider = ({ children }) => {
         setLoading(true);
         auth.onAuthStateChanged(user => {
             setLoading(false);
-            setUsuario(user);
+            setUsuario(user ?? undefined);
             
             if(user){
                 dispatchRedux(getDogsFavorite({uid:user.uid}));
-            }
+            };
         });
     },[]);
 
