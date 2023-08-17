@@ -16,7 +16,7 @@ const reactSwalErrorAlert = ({message}) => {
 const reactSwalSuccessAlert = ({message}) => {
     //? Show Alert to Denied activity
     MySwal.fire({
-        title:'Éxito',
+        title:'Operación exitosa',
         icon:'success',
         text: message,
         showConfirmButton:false

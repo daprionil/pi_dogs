@@ -7,6 +7,7 @@ import styled from "styled-components";
 import Button from "../base_components/Button";
 import { useAuthFirebase } from "../context/AuthProvider";
 import { addDogFavorite, deleteDogFavorite } from "../redux/createActions";
+import { reactSwalSuccessAlert } from "../utils/alertsSwal";
 
 const MySwal = withReactContent(Swal);
 
@@ -52,13 +53,7 @@ const ButtonAddDogFavorite = ({favorite, setFavorite, propsDog }) => {
             });
 
             if (!favorite) {
-                MySwal.fire({
-                    title: <p>Exitoso</p>,
-                    text: `${name} ha sido agregado correctamente a tus Favoritos`,
-                    icon: 'success',
-                    confirmButtonText: 'Aceptar',
-                    confirmButtonColor: 'green'
-                });
+                reactSwalSuccessAlert({message: `${propsDog.name} ha sido agregado correctamente a tus Favoritos`});
             }
 
             return;
