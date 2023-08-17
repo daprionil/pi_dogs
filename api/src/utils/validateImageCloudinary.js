@@ -1,5 +1,6 @@
 
 //? Valida si el archivo cuenta con una extensión válida para Cloudinary
+//? Esta función recibe un Objeto Blob ArrayBuffer con la Imágen para validar
 module.exports = function(imageFileObject){
     const MAX_SIZE_FILE = 2500000;
     const validExtensions = [
