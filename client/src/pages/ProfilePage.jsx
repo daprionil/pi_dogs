@@ -1,15 +1,17 @@
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { Title } from "react-head";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { TbUserEdit } from "react-icons/tb";
 
 import GroupPageDefault from "../components/GroupPageDefault";
 import Form from "../base_components/Form";
 import { useAuthFirebase } from "../context/AuthProvider";
 import UserInputImageProfile from "../components/UserInputImageProfile";
+import Button from "../base_components/Button";
 
 const MySwal = withReactContent(Swal);
 
@@ -17,8 +19,9 @@ const ProfilePage = () => {
     const usuario = useAuthFirebase();
     const [favoriteCount, lastDog] = useSelector(({favorite_dogs,all_dogs}) => [
         favorite_dogs?.length ?? 0,
-        favorite_dogs ? all_dogs.find(({id}) => id === favorite_dogs[0]) ?? {} : {}
+        favorite_dogs ? all_dogs.find(({id}) => id === favorite_dogs[favorite_dogs.length - 1]) ?? {} : {}
     ]);
+
     const [isEditMode, setIsEditMode] = useState(false);
     
     //================================================================
@@ -56,9 +59,9 @@ const ProfilePage = () => {
                             </>
                     }
                 </Form>
-                <div>
-
-                </div>
+                <HandleButtonEditMode>
+                    <TbUserEdit />
+                </HandleButtonEditMode>
             </ContainerProfileInfo>
         </GroupPageDefault>
     );
@@ -138,5 +141,37 @@ const ContainerMinInfo = styled.div`
         }
     }
 `;
+
+const fadeInFadeOut = keyframes`
+    0%,100%{
+        opacity: 1;
+    }
+    50%{
+        opacity: 0;
+    }
+`;
+
+const HandleButtonEditMode = styled(Button)`
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #f0f0f0;
+
+    &::before{
+        content: "";
+        position: absolute;
+        
+        width: 10px;
+        height: 10px;
+
+        background: red;
+        border-radius: 50%;
+        top: -5%;
+        right: -5%;
+        
+        animation: ${fadeInFadeOut} 1.2s ease-in infinite;
+    }
+`;
+
 
 export default ProfilePage;
