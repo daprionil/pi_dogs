@@ -14,11 +14,9 @@ const Input = styled.input`
 
     &:focus{
         border: 2px solid rgba(0,0,0,0.2);
-    }
-
-    &:focus{
         outline: none;
     }
+
     &:active{
         outline: none;
     }
@@ -52,6 +50,14 @@ const Input = styled.input`
         &:focus{
             border: none;
         }
+    }
+    &[type=number] {
+        appearance: none;
+        -moz-appearance: textfield;
+    }
+    &::-webkit-outer-spin-button,::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
     }
 `;
 

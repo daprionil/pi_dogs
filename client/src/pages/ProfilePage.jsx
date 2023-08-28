@@ -1,5 +1,3 @@
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 import { Title } from "react-head";
 import styled, { keyframes } from "styled-components";
 import { useSelector } from "react-redux";
@@ -12,8 +10,7 @@ import Form from "../base_components/Form";
 import { useAuthFirebase } from "../context/AuthProvider";
 import UserInputImageProfile from "../components/UserInputImageProfile";
 import Button from "../base_components/Button";
-
-const MySwal = withReactContent(Swal);
+import Input from "../base_components/Input";
 
 const ProfilePage = () => {
     const usuario = useAuthFirebase();
@@ -25,6 +22,9 @@ const ProfilePage = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     
     //================================================================
+    const handleChangeMode = () => setIsEditMode(state => !state);
+
+    console.log(usuario);
 
     return (
         <GroupPageDefault>
@@ -33,7 +33,44 @@ const ProfilePage = () => {
                 <Form>
                     {
                         isEditMode ?
-                            <p>editando...</p>
+                            <>
+                                <UserInputImageProfile />
+                                <ContainerListInfo>
+                                    <label htmlFor="username">
+                                        <InputFormProfile
+                                            value={usuario.displayName}
+                                            placeholder="Nombre de Usuario"
+                                            type="text"
+                                            name="username"
+                                            id="username"
+                                        />
+                                    </label>
+                                    <label htmlFor="emailuser">
+                                        <InputFormProfile
+                                            value={usuario.email}
+                                            placeholder="Correo Electrónico"
+                                            type="email"
+                                            name="emailuser"
+                                            id="emailuser"
+                                        />
+                                    </label>
+                                    <label htmlFor="phonenumber">
+                                        <InputFormProfile
+                                            value={usuario.phoneNumber ?? ''}
+                                            placeholder="Teléfono"
+                                            type="number"
+                                            name="phonenumber"
+                                            id="phonenumber"
+                                        />
+                                    </label>
+                                </ContainerListInfo>
+                                <div style={{display:'flex', justifyContent:'space-around'}}>
+                                    <Button onClick={handleChangeMode} bgcolor='#bb5d5d' color="white"> Cancelar </Button>
+                                    <Button bgcolor={"#458fff"} color="white">
+                                        Guardar
+                                    </Button>
+                                </div>
+                            </>
                         :   <>
                                 <UserInputImageProfile />
                                 <ContainerListInfo>
@@ -56,12 +93,12 @@ const ProfilePage = () => {
                                         </ContainerMinInfo>
                                     }
                                 </ListMinInfoContainer>
+                                <HandleButtonEditMode onClick={handleChangeMode}>
+                                    <TbUserEdit />
+                                </HandleButtonEditMode>
                             </>
                     }
                 </Form>
-                <HandleButtonEditMode>
-                    <TbUserEdit />
-                </HandleButtonEditMode>
             </ContainerProfileInfo>
         </GroupPageDefault>
     );
@@ -90,6 +127,13 @@ const ContainerListInfo = styled.div`
     
     gap: 1.3rem;
     padding: 30px 10px;
+    
+    width: 100%;
+
+    & label{
+        width: 100%;
+    }
+
     & p span:nth-child(1){
         font-weight: 700;
     }
@@ -153,7 +197,7 @@ const fadeInFadeOut = keyframes`
 
 const HandleButtonEditMode = styled(Button)`
     position: absolute;
-    top: 0;
+    top: 1%;
     right: 0;
     background: #f0f0f0;
 
@@ -166,11 +210,15 @@ const HandleButtonEditMode = styled(Button)`
 
         background: red;
         border-radius: 50%;
-        top: -5%;
+        top: 0;
         right: -5%;
-        
+
         animation: ${fadeInFadeOut} 1.2s ease-in infinite;
     }
+`;
+
+const InputFormProfile = styled(Input)`
+    width: 100%;
 `;
 
 
