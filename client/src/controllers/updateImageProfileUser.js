@@ -18,5 +18,5 @@ export default async function(imageBlobUser){
         photoURL: response.secure_url
     });
 
-    return response;
+    return {secure_url:response.secure_url};
 }

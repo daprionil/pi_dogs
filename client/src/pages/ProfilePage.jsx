@@ -11,6 +11,8 @@ import { useAuthFirebase } from "../context/AuthProvider";
 import UserInputImageProfile from "../components/UserInputImageProfile";
 import Button from "../base_components/Button";
 import Input from "../base_components/Input";
+import Message, { ERROR_TYPE_MESSAGE } from "../base_components/Message";
+import validateValuesProfileForm from "../utils/formProfileValidation";
 
 const ProfilePage = () => {
     const usuario = useAuthFirebase();
@@ -20,17 +22,43 @@ const ProfilePage = () => {
     ]);
 
     const [isEditMode, setIsEditMode] = useState(false);
+    const [ valuesFormProfile, setValuesFormProfile ] = useState({
+        username: usuario.displayName ?? '',
+        emailuser: usuario.email ?? '',
+        phoneNumber: usuario.phoneNumber ?? ''
+    });
+    const [ errorsFormProfile, setErrorsFormProfile ] = useState({
+        username: null,
+        emailuser: null,
+        phonenumber: null,
+    })
     
     //================================================================
     const handleChangeMode = () => setIsEditMode(state => !state);
+    const handleChangeFormProfile = ({target:{name, value}}) => {
+        setValuesFormProfile(state => {
+            const newState = {
+                ...state,
+                [name]:value
+            }
+            
+            //? Validate and set Errors
+            const errorsValidate = validateValuesProfileForm(newState);
+            setErrorsFormProfile(errorsValidate);
 
-    console.log(usuario);
+            return newState;
+        });
+    };
+    
+    const handleSubmit = evt => {
+        evt.preventDefault();
+    }
 
     return (
         <GroupPageDefault>
             <Title>Mi Perfil</Title>
             <ContainerProfileInfo>
-                <Form>
+                <Form onSubmit={handleSubmit}>
                     {
                         isEditMode ?
                             <>
@@ -38,35 +66,59 @@ const ProfilePage = () => {
                                 <ContainerListInfo>
                                     <label htmlFor="username">
                                         <InputFormProfile
-                                            value={usuario.displayName}
+                                            value={valuesFormProfile.username}
+                                            onChange={handleChangeFormProfile}
                                             placeholder="Nombre de Usuario"
                                             type="text"
                                             name="username"
                                             id="username"
                                         />
+                                        {
+                                            errorsFormProfile.username && <Message
+                                                style={{fontSize: '.7rem'}}
+                                                type={ERROR_TYPE_MESSAGE}
+                                                message={errorsFormProfile.username}
+                                            />
+                                        }
                                     </label>
                                     <label htmlFor="emailuser">
                                         <InputFormProfile
-                                            value={usuario.email}
+                                            value={valuesFormProfile.emailuser}
+                                            onChange={handleChangeFormProfile}
                                             placeholder="Correo Electrónico"
                                             type="email"
                                             name="emailuser"
                                             id="emailuser"
                                         />
+                                        {
+                                            errorsFormProfile.emailuser && <Message
+                                                style={{fontSize: '.7rem'}}
+                                                type={ERROR_TYPE_MESSAGE}
+                                                message={errorsFormProfile.emailuser}
+                                            />
+                                        }
                                     </label>
                                     <label htmlFor="phonenumber">
                                         <InputFormProfile
-                                            value={usuario.phoneNumber ?? ''}
+                                            value={valuesFormProfile.phoneNumber ?? ''}
+                                            onChange={handleChangeFormProfile}
                                             placeholder="Teléfono"
                                             type="number"
-                                            name="phonenumber"
+                                            name="phoneNumber"
                                             id="phonenumber"
                                         />
+                                        {
+                                            errorsFormProfile.phoneNumber && <Message
+                                                style={{fontSize: '.7rem'}}
+                                                type={ERROR_TYPE_MESSAGE}
+                                                message={errorsFormProfile.phoneNumber}
+                                            />
+                                        }
                                     </label>
                                 </ContainerListInfo>
                                 <div style={{display:'flex', justifyContent:'space-around'}}>
                                     <Button onClick={handleChangeMode} bgcolor='#bb5d5d' color="white"> Cancelar </Button>
-                                    <Button bgcolor={"#458fff"} color="white">
+                                    <Button type="submit" bgcolor={"#458fff"} color="white">
                                         Guardar
                                     </Button>
                                 </div>
