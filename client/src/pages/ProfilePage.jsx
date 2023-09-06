@@ -13,6 +13,9 @@ import Button from "../base_components/Button";
 import Input from "../base_components/Input";
 import Message, { ERROR_TYPE_MESSAGE } from "../base_components/Message";
 import validateValuesProfileForm from "../utils/formProfileValidation";
+import updateProfileUserFirebase from "../controllers/updateProfileUserFirebase";
+import { reactSwalErrorAlert, reactSwalSuccessAlert } from "../utils/alertsSwal";
+
 
 const ProfilePage = () => {
     const usuario = useAuthFirebase();
@@ -20,21 +23,26 @@ const ProfilePage = () => {
         favorite_dogs?.length ?? 0,
         favorite_dogs ? all_dogs.find(({id}) => id === favorite_dogs[favorite_dogs.length - 1]) ?? {} : {}
     ]);
-
+    
     const [isEditMode, setIsEditMode] = useState(false);
-    const [ valuesFormProfile, setValuesFormProfile ] = useState({
+    
+    //? Initial values to profile update form
+    const initialValuesFormProfile = {
         username: usuario.displayName ?? '',
         emailuser: usuario.email ?? '',
         phoneNumber: usuario.phoneNumber ?? ''
-    });
+    };
+    const [ valuesFormProfile, setValuesFormProfile ] = useState(initialValuesFormProfile);
     const [ errorsFormProfile, setErrorsFormProfile ] = useState({
         username: null,
         emailuser: null,
         phonenumber: null,
-    })
+    });
     
     //================================================================
+    const resetFormProfile = () => setValuesFormProfile(initialValuesFormProfile);
     const handleChangeMode = () => setIsEditMode(state => !state);
+
     const handleChangeFormProfile = ({target:{name, value}}) => {
         setValuesFormProfile(state => {
             const newState = {
@@ -50,8 +58,36 @@ const ProfilePage = () => {
         });
     };
     
-    const handleSubmit = evt => {
+    const handleSubmit = async evt => {
         evt.preventDefault();
+
+        //! Validate form with errors validations
+        const errors = validateValuesProfileForm(valuesFormProfile);
+        setErrorsFormProfile(errors);
+        
+        //! Validate if exist errors
+        const validateIfExistNotErrors = Object.values(errors).every(val => !val);
+        
+        //! If doesn't exist errors execute to updateUser
+        if(validateIfExistNotErrors){
+            try {
+                //? Update user
+                await updateProfileUserFirebase(valuesFormProfile);
+                
+                //? Display success alert
+                reactSwalSuccessAlert({message: 'Los cambios han sido realizados satisfactoriamente'})
+
+                //! Default actions
+                handleChangeMode();
+                resetFormProfile();
+            } catch ({message}) {
+                console.log(message);
+
+                //? Display error alert
+                reactSwalErrorAlert({message: 'Ha ocurrido un error, Intentalo nuevamente mas tarde'})
+            };
+            return;
+        }
     }
 
     return (
@@ -118,7 +154,11 @@ const ProfilePage = () => {
                                 </ContainerListInfo>
                                 <div style={{display:'flex', justifyContent:'space-around'}}>
                                     <Button onClick={handleChangeMode} bgcolor='#bb5d5d' color="white"> Cancelar </Button>
-                                    <Button type="submit" bgcolor={"#458fff"} color="white">
+                                    <Button
+                                        type="submit"
+                                        bgcolor={"#458fff"}
+                                        color="white"
+                                    >
                                         Guardar
                                     </Button>
                                 </div>

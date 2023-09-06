@@ -5,13 +5,14 @@ const messageErrors = {
 };
 
 const dictionaryValidationsFields = {
-    username: (val) => /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(\S).{4,13}$/.test(val) ,
-    emailuser: (val) => val.length < 50 && val.length >= 5,
-    phoneNumber: (val) => val.length < 13 && val.length >= 10 && !isNaN(val),
+    username: (val = '') => /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(\S).{4,13}$/.test(val) ,
+    emailuser: (val = '') => val.length < 50 && val.length >= 5,
+    phoneNumber: (val = '') => val.length < 13 && val.length >= 10 && !isNaN(val),
 };
 
 function validateFieldFormProfile(name, value){
     const validation = dictionaryValidationsFields[name](value);
+
     if(!validation){
         return messageErrors[name];
     }
