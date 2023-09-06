@@ -21,7 +21,7 @@ const ProfilePage = () => {
     const usuario = useAuthFirebase();
     const [favoriteCount, lastDog] = useSelector(({favorite_dogs,all_dogs}) => [
         favorite_dogs?.length ?? 0,
-        favorite_dogs ? all_dogs.find(({id}) => id === favorite_dogs[favorite_dogs.length - 1]) ?? {} : {}
+        favorite_dogs ? all_dogs.find(({id}) => id === favorite_dogs[favorite_dogs.length - 1]) ?? null : {}
     ]);
     
     const [isEditMode, setIsEditMode] = useState(false);
