@@ -1,12 +1,20 @@
 import styled from "styled-components";
 
-function Message({type,message}) {
+function Message({type,message, style = ({}) }) {
     return (
-        <ContentMessage type={type}>
+        <ContentMessage style={style} type={type}>
             <p>{message}</p>
         </ContentMessage>
     );
-}
+};
+
+const ERROR_TYPE_MESSAGE = 'error';
+const SUCCESS_TYPE_MESSAGE = 'success';
+
+const colorsType = {
+    [`${ERROR_TYPE_MESSAGE}`]:'#ff4116',
+    [`${SUCCESS_TYPE_MESSAGE}`]:'#00f024'
+};
 
 const ContentMessage =  styled.div`
     width: fit-content;
@@ -22,13 +30,8 @@ const ContentMessage =  styled.div`
         font-weight: bold;
     }
 `;
-
-export const ERROR_TYPE_MESSAGE = 'error';
-export const SUCCESS_TYPE_MESSAGE = 'success';
-
-const colorsType = {
-    error:'#ff4116',
-    success:'#00f024'
+export {
+    ERROR_TYPE_MESSAGE,
+    SUCCESS_TYPE_MESSAGE
 }
-
 export default Message;

@@ -1,36 +1,168 @@
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 import { Title } from "react-head";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { TbUserEdit } from "react-icons/tb";
 
 import GroupPageDefault from "../components/GroupPageDefault";
 import Form from "../base_components/Form";
 import { useAuthFirebase } from "../context/AuthProvider";
 import UserInputImageProfile from "../components/UserInputImageProfile";
+import Button from "../base_components/Button";
+import Input from "../base_components/Input";
+import Message, { ERROR_TYPE_MESSAGE } from "../base_components/Message";
+import validateValuesProfileForm from "../utils/formProfileValidation";
+import updateProfileUserFirebase from "../controllers/updateProfileUserFirebase";
+import { reactSwalErrorAlert, reactSwalSuccessAlert } from "../utils/alertsSwal";
 
-const MySwal = withReactContent(Swal);
 
 const ProfilePage = () => {
     const usuario = useAuthFirebase();
     const [favoriteCount, lastDog] = useSelector(({favorite_dogs,all_dogs}) => [
         favorite_dogs?.length ?? 0,
-        favorite_dogs ? all_dogs.find(({id}) => id === favorite_dogs[0]) ?? {} : {}
+        favorite_dogs ? all_dogs.find(({id}) => id === favorite_dogs[favorite_dogs.length - 1]) ?? {} : {}
     ]);
+    
     const [isEditMode, setIsEditMode] = useState(false);
     
+    //? Initial values to profile update form
+    const initialValuesFormProfile = {
+        username: usuario.displayName ?? '',
+        emailuser: usuario.email ?? '',
+        phoneNumber: usuario.phoneNumber ?? ''
+    };
+    const [ valuesFormProfile, setValuesFormProfile ] = useState(initialValuesFormProfile);
+    const [ errorsFormProfile, setErrorsFormProfile ] = useState({
+        username: null,
+        emailuser: null,
+        phonenumber: null,
+    });
+    
     //================================================================
+    const resetFormProfile = () => setValuesFormProfile(initialValuesFormProfile);
+    const handleChangeMode = () => setIsEditMode(state => !state);
+
+    const handleChangeFormProfile = ({target:{name, value}}) => {
+        setValuesFormProfile(state => {
+            const newState = {
+                ...state,
+                [name]:value
+            }
+            
+            //? Validate and set Errors
+            const errorsValidate = validateValuesProfileForm(newState);
+            setErrorsFormProfile(errorsValidate);
+
+            return newState;
+        });
+    };
+    
+    const handleSubmit = async evt => {
+        evt.preventDefault();
+
+        //! Validate form with errors validations
+        const errors = validateValuesProfileForm(valuesFormProfile);
+        setErrorsFormProfile(errors);
+        
+        //! Validate if exist errors
+        const validateIfExistNotErrors = Object.values(errors).every(val => !val);
+        
+        //! If doesn't exist errors execute to updateUser
+        if(validateIfExistNotErrors){
+            try {
+                //? Update user
+                await updateProfileUserFirebase(valuesFormProfile);
+                
+                //? Display success alert
+                reactSwalSuccessAlert({message: 'Los cambios han sido realizados satisfactoriamente'})
+
+                //! Default actions
+                handleChangeMode();
+                resetFormProfile();
+            } catch ({message}) {
+                console.log(message);
+
+                //? Display error alert
+                reactSwalErrorAlert({message: 'Ha ocurrido un error, Intentalo nuevamente mas tarde'})
+            };
+            return;
+        }
+    }
 
     return (
         <GroupPageDefault>
             <Title>Mi Perfil</Title>
             <ContainerProfileInfo>
-                <Form>
+                <Form onSubmit={handleSubmit}>
                     {
                         isEditMode ?
-                            <p>editando...</p>
+                            <>
+                                <UserInputImageProfile />
+                                <ContainerListInfo>
+                                    <label htmlFor="username">
+                                        <InputFormProfile
+                                            value={valuesFormProfile.username}
+                                            onChange={handleChangeFormProfile}
+                                            placeholder="Nombre de Usuario"
+                                            type="text"
+                                            name="username"
+                                            id="username"
+                                        />
+                                        {
+                                            errorsFormProfile.username && <Message
+                                                style={{fontSize: '.7rem'}}
+                                                type={ERROR_TYPE_MESSAGE}
+                                                message={errorsFormProfile.username}
+                                            />
+                                        }
+                                    </label>
+                                    <label htmlFor="emailuser">
+                                        <InputFormProfile
+                                            value={valuesFormProfile.emailuser}
+                                            onChange={handleChangeFormProfile}
+                                            placeholder="Correo Electrónico"
+                                            type="email"
+                                            name="emailuser"
+                                            id="emailuser"
+                                        />
+                                        {
+                                            errorsFormProfile.emailuser && <Message
+                                                style={{fontSize: '.7rem'}}
+                                                type={ERROR_TYPE_MESSAGE}
+                                                message={errorsFormProfile.emailuser}
+                                            />
+                                        }
+                                    </label>
+                                    <label htmlFor="phonenumber">
+                                        <InputFormProfile
+                                            value={valuesFormProfile.phoneNumber ?? ''}
+                                            onChange={handleChangeFormProfile}
+                                            placeholder="Teléfono"
+                                            type="number"
+                                            name="phoneNumber"
+                                            id="phonenumber"
+                                        />
+                                        {
+                                            errorsFormProfile.phoneNumber && <Message
+                                                style={{fontSize: '.7rem'}}
+                                                type={ERROR_TYPE_MESSAGE}
+                                                message={errorsFormProfile.phoneNumber}
+                                            />
+                                        }
+                                    </label>
+                                </ContainerListInfo>
+                                <div style={{display:'flex', justifyContent:'space-around'}}>
+                                    <Button onClick={handleChangeMode} bgcolor='#bb5d5d' color="white"> Cancelar </Button>
+                                    <Button
+                                        type="submit"
+                                        bgcolor={"#458fff"}
+                                        color="white"
+                                    >
+                                        Guardar
+                                    </Button>
+                                </div>
+                            </>
                         :   <>
                                 <UserInputImageProfile />
                                 <ContainerListInfo>
@@ -53,12 +185,12 @@ const ProfilePage = () => {
                                         </ContainerMinInfo>
                                     }
                                 </ListMinInfoContainer>
+                                <HandleButtonEditMode onClick={handleChangeMode}>
+                                    <TbUserEdit />
+                                </HandleButtonEditMode>
                             </>
                     }
                 </Form>
-                <div>
-
-                </div>
             </ContainerProfileInfo>
         </GroupPageDefault>
     );
@@ -87,6 +219,13 @@ const ContainerListInfo = styled.div`
     
     gap: 1.3rem;
     padding: 30px 10px;
+    
+    width: 100%;
+
+    & label{
+        width: 100%;
+    }
+
     & p span:nth-child(1){
         font-weight: 700;
     }
@@ -138,5 +277,41 @@ const ContainerMinInfo = styled.div`
         }
     }
 `;
+
+const fadeInFadeOut = keyframes`
+    0%,100%{
+        opacity: 1;
+    }
+    50%{
+        opacity: 0;
+    }
+`;
+
+const HandleButtonEditMode = styled(Button)`
+    position: absolute;
+    top: 1%;
+    right: 0;
+    background: #f0f0f0;
+
+    &::before{
+        content: "";
+        position: absolute;
+        
+        width: 10px;
+        height: 10px;
+
+        background: red;
+        border-radius: 50%;
+        top: 0;
+        right: -5%;
+
+        animation: ${fadeInFadeOut} 1.2s ease-in infinite;
+    }
+`;
+
+const InputFormProfile = styled(Input)`
+    width: 100%;
+`;
+
 
 export default ProfilePage;
