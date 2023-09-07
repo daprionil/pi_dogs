@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { TbUserEdit } from "react-icons/tb";
+import { MdOutlineDownloadDone } from 'react-icons/md';
 
 import GroupPageDefault from "../components/GroupPageDefault";
 import Form from "../base_components/Form";
@@ -16,6 +17,9 @@ import validateValuesProfileForm from "../utils/formProfileValidation";
 import updateProfileUserFirebase from "../controllers/updateProfileUserFirebase";
 import { reactSwalErrorAlert, reactSwalSuccessAlert } from "../utils/alertsSwal";
 
+import { PhoneAuthProvider, RecaptchaVerifier } from "firebase/auth";
+import { auth } from "../firebase/firebaseConfig";
+
 
 const ProfilePage = () => {
     const usuario = useAuthFirebase();
@@ -25,6 +29,7 @@ const ProfilePage = () => {
     ]);
     
     const [isEditMode, setIsEditMode] = useState(false);
+    const [ isCaptchaValidation, setIsCaptchaValidation ] = useState(false);
     
     //? Initial values to profile update form
     const initialValuesFormProfile = {
@@ -90,6 +95,27 @@ const ProfilePage = () => {
         }
     }
 
+    const validateCrendentialsCaptcha = async () => {
+        //! Validate if exist process to captcha validation
+        if(isCaptchaValidation) return;
+        
+        //! Init to captcha
+        setIsCaptchaValidation(true);
+        
+        const appVerifier = new RecaptchaVerifier(auth,'captcha_phonenumber',{
+            'size': 'normal',
+            'callback':(v) => console.log(v,'esoCALLBACK'),
+            'expired-callback':(v) => console.log(v,'eso'),
+        });
+        const provider = new PhoneAuthProvider(auth);
+        const vId = await provider.verifyPhoneNumber(`+57${valuesFormProfile.phoneNumber}`, appVerifier);
+        
+        const codeCrendential = prompt('Digita el código enviado a tu teléfono');
+        const phoneCredential = PhoneAuthProvider.credential(vId, codeCrendential);
+
+        console.log(phoneCredential);
+    };
+
     return (
         <GroupPageDefault>
             <Title>Mi Perfil</Title>
@@ -134,7 +160,7 @@ const ProfilePage = () => {
                                             />
                                         }
                                     </label>
-                                    <label htmlFor="phonenumber">
+                                    <label htmlFor="phonenumber" style={{position: 'relative'}}>
                                         <InputFormProfile
                                             value={valuesFormProfile.phoneNumber ?? ''}
                                             onChange={handleChangeFormProfile}
@@ -142,13 +168,25 @@ const ProfilePage = () => {
                                             type="number"
                                             name="phoneNumber"
                                             id="phonenumber"
+                                            disabled={isCaptchaValidation}
                                         />
                                         {
-                                            errorsFormProfile.phoneNumber && <Message
-                                                style={{fontSize: '.7rem'}}
-                                                type={ERROR_TYPE_MESSAGE}
-                                                message={errorsFormProfile.phoneNumber}
-                                            />
+                                            errorsFormProfile.phoneNumber &&
+                                            <>
+                                                <Message
+                                                    style={{fontSize: '.7rem'}}
+                                                    type={ERROR_TYPE_MESSAGE}
+                                                    message={errorsFormProfile.phoneNumber}
+                                                />
+                                            </>
+                                        }
+                                        {
+                                            (!errorsFormProfile.phoneNumber && valuesFormProfile.phoneNumber) ? <>
+                                                <ValidatePhoneNumber onClick={validateCrendentialsCaptcha}>
+                                                    <MdOutlineDownloadDone/>
+                                                </ValidatePhoneNumber>
+                                                <div id="captcha_phonenumber"></div>
+                                            </> : null
                                         }
                                     </label>
                                 </ContainerListInfo>
@@ -311,6 +349,28 @@ const HandleButtonEditMode = styled(Button)`
 
 const InputFormProfile = styled(Input)`
     width: 100%;
+`;
+
+const ValidatePhoneNumber = styled.span`
+    position: absolute;
+    
+    padding: 3px 5px;
+    border-radius: 2px;
+
+    background: #edededee;
+    top: 50%;
+    left: 105%;
+    transform: translateY(-50%);
+
+    transition: all .3s ease-in-out;
+    cursor: pointer;
+    &:hover{
+        box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+    }
+    & svg{
+        color: green;
+        filter: drop-shadow(0 1px 15px rgba(0,0,0,0.4));
+    }
 `;
 
 

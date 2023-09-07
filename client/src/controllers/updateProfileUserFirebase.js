@@ -1,4 +1,4 @@
-import { updateProfile, updateEmail } from "firebase/auth";
+import { updateProfile, updateEmail, updatePhoneNumber } from "firebase/auth";
 import { auth } from "../firebase/firebaseConfig";
 
 const typeUpdate = {
@@ -6,7 +6,7 @@ const typeUpdate = {
         displayName
     }),
     emailuser: (email, user) => updateEmail(user, email),
-    phoneNumber: (phoneNumber, user) => updateProfile(user, {phoneNumber})
+    phoneNumber: (phoneNumberCredential, user) => updatePhoneNumber(user, phoneNumberCredential)
 };
 
 async function updateProfileUserFirebase({username: displayName, emailuser, phoneNumber}) {
