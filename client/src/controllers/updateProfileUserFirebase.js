@@ -10,6 +10,7 @@ const typeUpdate = {
 };
 
 async function updateProfileUserFirebase({username: displayName, emailuser, phoneNumber}) {
+    console.log(phoneNumber);
     const user = auth.currentUser;
 
     //! If doesn't exist an user

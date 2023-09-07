@@ -1,7 +1,7 @@
 import { Title } from "react-head";
 import styled, { keyframes } from "styled-components";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { TbUserEdit } from "react-icons/tb";
 import { MdOutlineDownloadDone } from 'react-icons/md';
@@ -17,7 +17,7 @@ import validateValuesProfileForm from "../utils/formProfileValidation";
 import updateProfileUserFirebase from "../controllers/updateProfileUserFirebase";
 import { reactSwalErrorAlert, reactSwalSuccessAlert } from "../utils/alertsSwal";
 
-import { PhoneAuthProvider, RecaptchaVerifier } from "firebase/auth";
+import { PhoneAuthProvider, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../firebase/firebaseConfig";
 
 
@@ -38,6 +38,7 @@ const ProfilePage = () => {
         phoneNumber: usuario.phoneNumber ?? ''
     };
     const [ valuesFormProfile, setValuesFormProfile ] = useState(initialValuesFormProfile);
+    const phoneNumberCredential = useRef();
     const [ errorsFormProfile, setErrorsFormProfile ] = useState({
         username: null,
         emailuser: null,
@@ -77,7 +78,7 @@ const ProfilePage = () => {
         if(validateIfExistNotErrors){
             try {
                 //? Update user
-                await updateProfileUserFirebase(valuesFormProfile);
+                await updateProfileUserFirebase({...valuesFormProfile, phoneNumber: phoneNumberCredential.current});
                 
                 //? Display success alert
                 reactSwalSuccessAlert({message: 'Los cambios han sido realizados satisfactoriamente'})
@@ -101,19 +102,32 @@ const ProfilePage = () => {
         
         //! Init to captcha
         setIsCaptchaValidation(true);
-        
         const appVerifier = new RecaptchaVerifier(auth,'captcha_phonenumber',{
             'size': 'normal',
             'callback':(v) => console.log(v,'esoCALLBACK'),
             'expired-callback':(v) => console.log(v,'eso'),
         });
         const provider = new PhoneAuthProvider(auth);
-        const vId = await provider.verifyPhoneNumber(`+57${valuesFormProfile.phoneNumber}`, appVerifier);
-        
-        const codeCrendential = prompt('Digita el código enviado a tu teléfono');
-        const phoneCredential = PhoneAuthProvider.credential(vId, codeCrendential);
+        try {
+            const vId = await provider.verifyPhoneNumber(`+57 ${valuesFormProfile.phoneNumber}`, appVerifier);
+            console.log(`+57${valuesFormProfile.phoneNumber}`);
+            const result = await signInWithPhoneNumber(
+                auth,
+                `+57${valuesFormProfile.phoneNumber}`,
+                appVerifier
+            );
+            
+            const code = prompt('Revisa tu telefono, te hemos enviado un código de verificación');
+            result.confirm(code);
+            
+            const phoneCredential = PhoneAuthProvider.credential(vId,code);
+            phoneNumberCredential.current = phoneCredential;
+            appVerifier.clear();
+        } catch (error) {
+            setIsCaptchaValidation(false);
+            validateCrendentialsCaptcha();
+        }
 
-        console.log(phoneCredential);
     };
 
     return (
@@ -160,14 +174,14 @@ const ProfilePage = () => {
                                             />
                                         }
                                     </label>
-                                    <label htmlFor="phonenumber" style={{position: 'relative'}}>
+                                    <label htmlFor="phoneNumber" style={{position: 'relative'}}>
                                         <InputFormProfile
                                             value={valuesFormProfile.phoneNumber ?? ''}
                                             onChange={handleChangeFormProfile}
                                             placeholder="Teléfono"
                                             type="number"
                                             name="phoneNumber"
-                                            id="phonenumber"
+                                            id="phoneNumber"
                                             disabled={isCaptchaValidation}
                                         />
                                         {
