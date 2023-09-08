@@ -73,7 +73,7 @@ const ProfilePage = () => {
                 await updateProfileUserFirebase(valuesFormProfile);
                 
                 //? Display success alert
-                reactSwalSuccessAlert({message: 'Los cambios han sido realizados satisfactoriamente'})
+                reactSwalSuccessAlert({message: 'Los cambios han sido realizados satisfactoriamente'});
 
                 //! Default actions
                 handleChangeMode();
@@ -82,7 +82,7 @@ const ProfilePage = () => {
                 console.log(message);
 
                 //? Display error alert
-                reactSwalErrorAlert({message: 'Ha ocurrido un error, Intentalo nuevamente mas tarde'})
+                reactSwalErrorAlert({message: 'Ha ocurrido un error, Intentalo nuevamente mas tarde'});
             }
             return;
         }
