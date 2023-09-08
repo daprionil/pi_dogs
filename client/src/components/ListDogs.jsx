@@ -17,8 +17,8 @@ function ListDogs() {
                 :
                     dogs.length ? //If exist dogs for display
                         
-                        dogs.map((dog,i) => {
-                            return <CardDog {...dog} key={i}/>
+                        dogs.map((dog) => {
+                            return <CardDog {...dog} key={dog.id}/>
                         })
 
                     : <SectionDefaultNullish
