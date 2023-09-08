@@ -29,14 +29,12 @@ const ProfilePage = () => {
     //? Initial values to profile update form
     const initialValuesFormProfile = {
         username: usuario.displayName ?? '',
-        emailuser: usuario.email ?? '',
-        phoneNumber: usuario.phoneNumber ?? ''
+        emailuser: usuario.email ?? ''
     };
     const [ valuesFormProfile, setValuesFormProfile ] = useState(initialValuesFormProfile);
     const [ errorsFormProfile, setErrorsFormProfile ] = useState({
         username: null,
-        emailuser: null,
-        phonenumber: null,
+        emailuser: null
     });
     
     //================================================================
@@ -75,7 +73,7 @@ const ProfilePage = () => {
                 await updateProfileUserFirebase(valuesFormProfile);
                 
                 //? Display success alert
-                reactSwalSuccessAlert({message: 'Los cambios han sido realizados satisfactoriamente'})
+                reactSwalSuccessAlert({message: 'Los cambios han sido realizados satisfactoriamente'});
 
                 //! Default actions
                 handleChangeMode();
@@ -84,8 +82,8 @@ const ProfilePage = () => {
                 console.log(message);
 
                 //? Display error alert
-                reactSwalErrorAlert({message: 'Ha ocurrido un error, Intentalo nuevamente mas tarde'})
-            };
+                reactSwalErrorAlert({message: 'Ha ocurrido un error, Intentalo nuevamente mas tarde'});
+            }
             return;
         }
     }
@@ -134,23 +132,6 @@ const ProfilePage = () => {
                                             />
                                         }
                                     </label>
-                                    <label htmlFor="phonenumber">
-                                        <InputFormProfile
-                                            value={valuesFormProfile.phoneNumber ?? ''}
-                                            onChange={handleChangeFormProfile}
-                                            placeholder="Teléfono"
-                                            type="number"
-                                            name="phoneNumber"
-                                            id="phonenumber"
-                                        />
-                                        {
-                                            errorsFormProfile.phoneNumber && <Message
-                                                style={{fontSize: '.7rem'}}
-                                                type={ERROR_TYPE_MESSAGE}
-                                                message={errorsFormProfile.phoneNumber}
-                                            />
-                                        }
-                                    </label>
                                 </ContainerListInfo>
                                 <div style={{display:'flex', justifyContent:'space-around'}}>
                                     <Button onClick={handleChangeMode} bgcolor='#bb5d5d' color="white"> Cancelar </Button>
@@ -168,7 +149,6 @@ const ProfilePage = () => {
                                 <ContainerListInfo>
                                     <p><span>Nombre Usuario: </span>{usuario.displayName ?? 'sin definir'}</p>
                                     <p><span>Correo Electrónico: </span>{usuario.email ?? 'sin definir'}</p>
-                                    <p><span>Telefono: </span>{usuario.phoneNumber ?? 'sin definir'}</p>
                                 </ContainerListInfo>
                                 <ListMinInfoContainer>
                                     <ContainerMinInfo>
