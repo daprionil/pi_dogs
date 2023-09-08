@@ -25,6 +25,6 @@ async function updateProfileUserFirebase({username: displayName, emailuser, phon
     const result = await Promise.all(promisesUpdateProfile);
 
     return result;
-};
+}
 
 export default updateProfileUserFirebase;

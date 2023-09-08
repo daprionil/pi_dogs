@@ -17,8 +17,7 @@ import validateValuesProfileForm from "../utils/formProfileValidation";
 import updateProfileUserFirebase from "../controllers/updateProfileUserFirebase";
 import { reactSwalErrorAlert, reactSwalSuccessAlert } from "../utils/alertsSwal";
 
-import { PhoneAuthProvider, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { auth } from "../firebase/firebaseConfig";
+import { PhoneAuthProvider, RecaptchaVerifier, getAuth, signInWithPhoneNumber } from "firebase/auth";
 
 
 const ProfilePage = () => {
@@ -91,38 +90,39 @@ const ProfilePage = () => {
 
                 //? Display error alert
                 reactSwalErrorAlert({message: 'Ha ocurrido un error, Intentalo nuevamente mas tarde'})
-            };
+            }
             return;
         }
     }
 
     const validateCrendentialsCaptcha = async () => {
+        const auth = getAuth();
+
         //! Validate if exist process to captcha validation
         if(isCaptchaValidation) return;
         
         //! Init to captcha
         setIsCaptchaValidation(true);
         const appVerifier = new RecaptchaVerifier(auth,'captcha_phonenumber',{
-            'size': 'normal',
-            'callback':(v) => console.log(v,'esoCALLBACK'),
-            'expired-callback':(v) => console.log(v,'eso'),
+            'size': 'invisible',
+            'callback':console.log,
+            'expired-callback':console.log,
         });
         const provider = new PhoneAuthProvider(auth);
         try {
-            const vId = await provider.verifyPhoneNumber(`+57 ${valuesFormProfile.phoneNumber}`, appVerifier);
-            console.log(`+57${valuesFormProfile.phoneNumber}`);
+            const vId = await provider.verifyPhoneNumber(`+57${valuesFormProfile.phoneNumber}`, appVerifier);
             const result = await signInWithPhoneNumber(
                 auth,
                 `+57${valuesFormProfile.phoneNumber}`,
                 appVerifier
             );
+            appVerifier.clear();
             
             const code = prompt('Revisa tu telefono, te hemos enviado un código de verificación');
             result.confirm(code);
             
             const phoneCredential = PhoneAuthProvider.credential(vId,code);
             phoneNumberCredential.current = phoneCredential;
-            appVerifier.clear();
         } catch (error) {
             setIsCaptchaValidation(false);
             validateCrendentialsCaptcha();
